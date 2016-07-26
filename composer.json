@@ -1,0 +1,14 @@
+{
+  "name": "drupal/schemata",
+  "type": "drupal-module",
+  "description": "Provide schema definitions of Drupal entities for type validation, code generation, and documentation.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/schemata",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/schemata",
+    "source": "http://cgit.drupalcode.org/schemata"
+  },
+  "require": { }
+}

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains schemata.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function schemata_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the json_schema module.
+    case 'help.page.schemata':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provide schema definitions of Drupal entities for type validation, code generation, and documentation.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

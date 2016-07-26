@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Contains hal_json_schema.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * @defgroup hal_json_schema Example: HAL JSON Schema
+ * @ingroup hal_json_schema
+ * @{
+ * HAL JSON Schema code.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function hal_json_schema_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the oar_api_format module.
+    case 'help.page.hal_json_schema':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides a Schemata Serializer to generate JSON Schema v4 for HAL output.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * @} End of "defgroup hal_json_schema".
+ */

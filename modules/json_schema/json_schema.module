@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Contains oar_hal.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * @defgroup oar_hal Example: OAR HAL
+ * @ingroup oar_hal
+ * @{
+ * OAR HAL foundation code.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function json_schema_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the oar_api_format module.
+    case 'help.page.json_schema':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides a Schemata Serializer to generate JSON Schema v4.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * @} End of "defgroup oar_hal".
+ */
