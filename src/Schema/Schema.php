@@ -2,6 +2,7 @@
 
 namespace Drupal\schemata\Schema;
 
+use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Cache\RefinableCacheableDependencyTrait;
@@ -165,6 +166,54 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
     }
 
     return $output;
+  }
+
+  /**
+   * Magic method: Unsets a property.
+   *
+   * @param string $name
+   *   The name of the property to unset; e.g., 'title' or 'name'.
+   */
+  public function __unset($name) {
+    unset($this->properties[$name]);
+  }
+
+  /**
+   * Magic method: Determines whether a property is set.
+   *
+   * @param string $name
+   *   The name of the property to check; e.g., 'title' or 'name'.
+   *
+   * @return bool
+   *   Returns TRUE if the property exists and is set, FALSE otherwise.
+   */
+  public function __isset($name) {
+    return isset($this->properties[$name]);
+  }
+
+  /**
+   * Magic method: Sets a property value.
+   *
+   * @param string $name
+   *   The name of the property to set; e.g., 'title' or 'name'.
+   * @param \Drupal\Core\TypedData\DataDefinitionInterface $value
+   *   The value to set.
+   */
+  public function __set($name, DataDefinitionInterface $value) {
+    $this->properties[$name] = $value;
+  }
+
+  /**
+   * Magic method: Gets a property value.
+   *
+   * @param string $name
+   *   The name of the property to get; e.g., 'title' or 'name'.
+   *
+   * @param \Drupal\Core\TypedData\DataDefinitionInterface
+   *   The property object.
+   */
+  public function __get($name) {
+    $this->properties[$name] = $value;
   }
 
 }
