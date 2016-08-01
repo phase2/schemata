@@ -127,14 +127,6 @@ class DataDefinitionNormalizer extends NormalizerBase {
 
     }
 
-    if ($data['type'] == 'string') {
-      // @todo confirm minLength is needed for required items.
-      // This enforces that required properties not be empty string values.
-      if ($this->requiredProperty($property)) {
-        $data['minLength'] = 1;
-      }
-    }
-
     if (isset($context['parent']) && $context['parent']->getDataType() == 'field_item:uuid') {
       $data['format'] = 'uuid';
     }
