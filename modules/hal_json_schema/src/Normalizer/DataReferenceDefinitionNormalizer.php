@@ -5,6 +5,7 @@ namespace Drupal\hal_json_schema\Normalizer;
 use Drupal\json_schema\Normalizer\DataReferenceDefinitionNormalizer as JsonDataReferenceDefinitionNormalizer;
 use Drupal\schemata\SchemaUrl;
 use Drupal\rest\LinkManager\LinkManagerInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 
 /**
  * Normalizer for Entity References in HAL+JSON style.
@@ -28,10 +29,13 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
   /**
    * Constructs an DataReferenceDefinitionNormalizer object.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   *   The Entity Type Manager.
    * @param \Drupal\rest\LinkManager\LinkManagerInterface $link_manager
    *   The hypermedia link manager.
    */
-  public function __construct(LinkManagerInterface $link_manager) {
+  public function __construct(EntityTypeManager $entity_type_manager, LinkManagerInterface $link_manager) {
+    parent::__construct($entity_type_manager);
     $this->linkManager = $link_manager;
   }
 
@@ -40,12 +44,7 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
    */
   public function normalize($entity, $format = NULL, array $context = array()) {
     /* @var $entity \Drupal\Core\TypedData\DataReferenceDefinitionInterface */
-    // We do not support config entities.
-    // @todo properly identify and exclude ConfigEntities.
-    if ($entity->getDataType() == 'language_reference'
-      || $entity->getConstraint('EntityType') == 'node_type'
-      || $entity->getConstraint('EntityType') == 'user_role') {
-
+    if (!$this->validateEntity($entity)) {
       return [];
     }
 

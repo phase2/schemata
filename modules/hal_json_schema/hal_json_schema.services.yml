@@ -3,7 +3,7 @@ services:
   # HAL+JSON version of the Data Reference normalizer.
   serializer.normalizer.data_reference_definition.hal_json_schema:
     class: Drupal\hal_json_schema\Normalizer\DataReferenceDefinitionNormalizer
-    arguments: ['@rest.link_manager']
+    arguments: ['@entity_type.manager', '@rest.link_manager']
     tags:
       - { name: normalizer, priority: 30 }
 

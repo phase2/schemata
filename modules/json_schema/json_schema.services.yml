@@ -6,6 +6,7 @@ services:
   # the same priority.
   serializer.normalizer.data_reference_definition.json_schema:
     class: Drupal\json_schema\Normalizer\DataReferenceDefinitionNormalizer
+    arguments: ['@entity_type.manager']
     tags:
       - { name: normalizer, priority: 25 }
 
