@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -115,8 +116,12 @@ class SchemataResourceBase extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    *   The response for the REST request.
    *
-   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-   *   Throws exception expected.
+   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   *   Throws access denied if permission not available.
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   *   Throws not found if resource not available.
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+   *   Throws bad request if the request is not valid.
    */
   public function get($entity_type, $bundle = NULL) {
     if (!$this->currentUser->hasPermission('access content')) {
@@ -126,8 +131,11 @@ class SchemataResourceBase extends ResourceBase {
     // Validating entity type and bundle validity here allows us to throw
     // HTTP-centric errors.
     $entity_type_plugin = $this->entityTypeManager->getDefinition($entity_type, FALSE);
-    if (empty($entity_type_plugin) || !($entity_type_plugin->isSubclassOf('\Drupal\Core\Entity\ContentEntityInterface'))) {
+    if (empty($entity_type_plugin)) {
       throw new NotFoundHttpException('Requested Entity Type not found.');
+    }
+    if (!($entity_type_plugin->isSubclassOf('\Drupal\Core\Entity\ContentEntityInterface'))) {
+      throw new BadRequestHttpException('Only Content Entities are supported.');
     }
 
     $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type);
