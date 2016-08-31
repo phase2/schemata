@@ -52,12 +52,14 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
     $parentProperty = $this->extractPropertyData($context['parent'], $context);
     $property = $this->extractPropertyData($entity, $context);
     $target_type = $entity->getConstraint('EntityType');
-    $target_bundles = $context['settings']['handler_settings']['target_bundles'];
+    $target_bundles = isset($context['settings']['handler_settings']['target_bundles']) ?
+      $context['settings']['handler_settings']['target_bundles'] : [];
 
     // Build the relation URI, which is used as the property key.
     $field_uri = $this->linkManager->getRelationUri(
       $context['entityTypeId'],
-      $context['bundleId'],
+      // Drupal\Core\Entity\Entity::bundle() returns Entity Type ID by default.
+      isset($context['bundleId']) ? $context['bundleId'] : $context['entityTypeId'],
       $context['name'],
       $context
     );
@@ -88,7 +90,7 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
 
     // Add Schema resource references.
     $item = &$normalized['_embedded'][$field_uri]['items'];
-    if (!isset($target_bundles)) {
+    if (empty($target_bundles)) {
       $item['$ref'] = SchemaUrl::fromOptions($format, $target_type)->toString();
     }
     elseif (count($target_bundles) == 1) {
