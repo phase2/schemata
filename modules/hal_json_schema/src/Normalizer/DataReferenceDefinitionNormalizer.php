@@ -5,6 +5,7 @@ namespace Drupal\hal_json_schema\Normalizer;
 use Drupal\json_schema\Normalizer\DataReferenceDefinitionNormalizer as JsonDataReferenceDefinitionNormalizer;
 use Drupal\schemata\SchemaUrl;
 use Drupal\rest\LinkManager\LinkManagerInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 
 /**
  * Normalizer for Entity References in HAL+JSON style.
@@ -28,10 +29,13 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
   /**
    * Constructs an DataReferenceDefinitionNormalizer object.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   *   The Entity Type Manager.
    * @param \Drupal\rest\LinkManager\LinkManagerInterface $link_manager
    *   The hypermedia link manager.
    */
-  public function __construct(LinkManagerInterface $link_manager) {
+  public function __construct(EntityTypeManager $entity_type_manager, LinkManagerInterface $link_manager) {
+    parent::__construct($entity_type_manager);
     $this->linkManager = $link_manager;
   }
 
@@ -40,12 +44,7 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
    */
   public function normalize($entity, $format = NULL, array $context = array()) {
     /* @var $entity \Drupal\Core\TypedData\DataReferenceDefinitionInterface */
-    // We do not support config entities.
-    // @todo properly identify and exclude ConfigEntities.
-    if ($entity->getDataType() == 'language_reference'
-      || $entity->getConstraint('EntityType') == 'node_type'
-      || $entity->getConstraint('EntityType') == 'user_role') {
-
+    if (!$this->validateEntity($entity)) {
       return [];
     }
 
@@ -53,12 +52,14 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
     $parentProperty = $this->extractPropertyData($context['parent'], $context);
     $property = $this->extractPropertyData($entity, $context);
     $target_type = $entity->getConstraint('EntityType');
-    $target_bundles = $context['settings']['handler_settings']['target_bundles'];
+    $target_bundles = isset($context['settings']['handler_settings']['target_bundles']) ?
+      $context['settings']['handler_settings']['target_bundles'] : [];
 
     // Build the relation URI, which is used as the property key.
     $field_uri = $this->linkManager->getRelationUri(
       $context['entityTypeId'],
-      $context['bundleId'],
+      // Drupal\Core\Entity\Entity::bundle() returns Entity Type ID by default.
+      isset($context['bundleId']) ? $context['bundleId'] : $context['entityTypeId'],
       $context['name'],
       $context
     );
@@ -89,7 +90,7 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
 
     // Add Schema resource references.
     $item = &$normalized['_embedded'][$field_uri]['items'];
-    if (!isset($target_bundles)) {
+    if (empty($target_bundles)) {
       $item['$ref'] = SchemaUrl::fromOptions($format, $target_type)->toString();
     }
     elseif (count($target_bundles) == 1) {
