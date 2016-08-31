@@ -143,7 +143,7 @@ class SchemataResourceBase extends ResourceBase {
     // core/lib/Drupal/Core/EventSubscriber/EarlyRenderingControllerWrapperSubscriber.php.
     // This is an error complaining of short-circuiting the rendering of cache
     // metadata.
-    $schema->addCacheableDependency($schema);
+    $response->addCacheableDependency($schema);
 
     return $response;
   }
