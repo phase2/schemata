@@ -94,7 +94,7 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
       $item['$ref'] = SchemaUrl::fromOptions($format, $target_type)->toString();
     }
     elseif (count($target_bundles) == 1) {
-      $item['$ref'] = SchemaUrl::fromOptions($format, $target_type, $target_bundles[0])->toString();
+      $item['$ref'] = SchemaUrl::fromOptions($format, $target_type, reset($target_bundles))->toString();
     }
     elseif (count($target_bundles) > 1) {
       $refs = [];
