@@ -45,8 +45,7 @@ class SchemaUrl {
    *   The schema resource Url object.
    */
   public static function fromOptions($format, $entity_type, $bundle = NULL) {
-    $route = empty($bundle) ? 'rest.schemata_entity_base.GET.' . $format
-      : 'rest.schemata_entity_bundle.GET.' . $format;
+    $route = static::getRouteName($format, $bundle);
 
     $parameters = [
       'entity_type' => $entity_type,
@@ -61,6 +60,23 @@ class SchemaUrl {
       ],
       'absolute' => TRUE,
     ]);
+  }
+
+  /**
+   * Determine the route name.
+   *
+   * @param string $format
+   *   The route format.
+   * @param string $bundle
+   *   The bundle name.
+   *
+   * @return string
+   *   The route name.
+   */
+  public static function getRouteName($format, $bundle = '') {
+    $route = empty($bundle) ? 'rest.schemata_entity_base.GET.' . $format
+      : 'rest.schemata_entity_bundle.GET.' . $format;
+    return $route;
   }
 
 }

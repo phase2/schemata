@@ -27,9 +27,15 @@ class SchemataSchemaNormalizer extends NormalizerBase {
     /* @var $entity \Drupal\schemata\Schema\SchemaInterface */
     $normalized = [
       '$schema' => 'http://json-schema.org/draft-04/schema#',
-      'id' => SchemaUrl::fromSchema($format, $entity)->toString(),
       'type' => 'object',
     ];
+
+    /** @var \Drupal\Core\Routing\RouteProvider $route_provider */
+    $route_provider = \Drupal::service('router.route_provider');
+    // If REST route is enabled add id.
+    if ($routes = $route_provider->getRoutesByNames([SchemaUrl::getRouteName($format)])) {
+      $normalized['id'] = SchemaUrl::fromSchema($format, $entity)->toString();
+    }
     $normalized = array_merge($normalized, $entity->getMetadata());
 
     // Stash schema request parameters.
