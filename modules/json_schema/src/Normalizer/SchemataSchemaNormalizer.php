@@ -2,7 +2,7 @@
 
 namespace Drupal\json_schema\Normalizer;
 
-use Drupal\json_schema\Normalizer\NormalizerBase;
+use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\schemata\SchemaUrl;
 use Drupal\Component\Utility\NestedArray;
@@ -20,6 +20,23 @@ class SchemataSchemaNormalizer extends NormalizerBase {
   protected $supportedInterfaceOrClass = 'Drupal\schemata\Schema\SchemaInterface';
 
   /**
+   * The route provider service.
+   *
+   * @var \Drupal\Core\Routing\RouteProviderInterface
+   */
+  protected $routeProvider;
+
+  /**
+   * Constructs the BlockListController.
+   *
+   * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
+   *   The route provider service.
+   */
+  public function __construct(RouteProviderInterface $route_provider) {
+    $this->routeProvider = $route_provider;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function normalize($entity, $format = NULL, array $context = array()) {
@@ -30,10 +47,8 @@ class SchemataSchemaNormalizer extends NormalizerBase {
       'type' => 'object',
     ];
 
-    /** @var \Drupal\Core\Routing\RouteProvider $route_provider */
-    $route_provider = \Drupal::service('router.route_provider');
     // If REST route is enabled add id.
-    if ($routes = $route_provider->getRoutesByNames([SchemaUrl::getRouteName($format)])) {
+    if ($routes = $this->routeProvider->getRoutesByNames([SchemaUrl::getRouteName($format)])) {
       $normalized['id'] = SchemaUrl::fromSchema($format, $entity)->toString();
     }
     $normalized = array_merge($normalized, $entity->getMetadata());
