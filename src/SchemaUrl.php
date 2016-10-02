@@ -74,9 +74,8 @@ class SchemaUrl {
    *   The route name.
    */
   public static function getRouteName($format, $bundle = '') {
-    $route = empty($bundle) ? 'rest.schemata_entity_base.GET.' . $format
+    return empty($bundle) ? 'rest.schemata_entity_base.GET.' . $format
       : 'rest.schemata_entity_bundle.GET.' . $format;
-    return $route;
   }
 
 }
