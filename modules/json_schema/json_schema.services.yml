@@ -51,3 +51,7 @@ services:
     class: Drupal\json_schema\Encoder\JsonEncoder
     tags:
       - { name: encoder, priority: 10, format: json_schema }
+
+  plugin.manager.json_schema.type_mapper:
+    class: Drupal\json_schema\Plugin\Type\TypeMapperPluginManager
+    arguments: ['@container.namespaces', '@module_handler']
