@@ -84,7 +84,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Den
    *   purposes.
    */
   protected function requiredProperty(DataDefinitionInterface $property) {
-    return $property->isReadOnly() || $property->isRequired();
+    return $property->isRequired();
   }
 
 }
