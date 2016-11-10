@@ -79,53 +79,15 @@ class DataDefinitionNormalizer extends NormalizerBase {
    *   Serializer context.
    *
    * @return array
-   *   Discrete values of the property definition
+   *   Discrete values of the property definition.
+   *
+   * @todo identify how to cleanly inject the plugin manager without requiring
+   *   updates to many of the normalizers.
    */
   protected function extractPropertyData(DataDefinitionInterface $property, array $context = []) {
-    $data = [
-      // 'constraints' => print_r($property->getConstraints(), TRUE),
-      // 'settings' => print_r($property->getSettings(), TRUE),
-      // 'class' => get_class($Property),
-      // 'computed' => $property->isComputed(),
-    ];
-
-    if ($item = $property->getLabel()) {
-      $data['title'] = $item;
-    }
-    if ($item = $property->getDescription()) {
-      $data['description'] = $item;
-    }
-
-    $type = $property->getDataType();
-    switch ($type) {
-      case 'email':
-        $data['type'] = 'string';
-        $data['format'] = 'email';
-        break;
-
-      case 'datetime_iso8601':
-        $data['type'] = 'string';
-        $data['format'] = 'date';
-        break;
-
-      case 'timestamp':
-        $data['type'] = 'number';
-        $data['format'] = 'utc-millisec';
-        break;
-
-      case 'filter_format':
-        // @todo machine_name format or regex validation.
-        $data['type'] = 'string';
-        break;
-
-      case 'entity_reference':
-        $data['type'] = 'object';
-        break;
-
-      default:
-        $data['type'] = $type;
-
-    }
+    $type_mapper_manager = \Drupal::service('plugin.manager.json_schema.type_mapper');
+    $data = $type_mapper_manager->createInstance($property->getDataType())
+      ->getMappedValue($property);
 
     if (isset($context['parent']) && $context['parent']->getDataType() == 'field_item:uuid') {
       $data['format'] = 'uuid';
