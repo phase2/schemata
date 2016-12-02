@@ -44,6 +44,7 @@ services:
   # This is the main JSON Schema normalizer.
   serializer.normalizer.schema.json_schema:
     class: Drupal\json_schema\Normalizer\SchemataSchemaNormalizer
+    arguments: ['@router.route_provider']
     tags:
       - { name: normalizer, priority: 10 }
 
