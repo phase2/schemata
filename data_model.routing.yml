@@ -1,0 +1,2 @@
+route_callbacks:
+  - '\Drupal\data_model\Routing\Routes::routes'
