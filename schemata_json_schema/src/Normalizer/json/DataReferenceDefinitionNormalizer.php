@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model_json_schema\Normalizer\json;
+namespace Drupal\schemata_json_schema\Normalizer\json;
 
 use Drupal\Core\Entity\EntityTypeManager;
 

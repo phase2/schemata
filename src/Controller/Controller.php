@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\data_model\Controller;
+namespace Drupal\schemata\Controller;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
 use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\data_model\SchemaFactory;
+use Drupal\schemata\SchemaFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -19,7 +19,7 @@ class Controller extends ControllerBase {
   protected $serializer;
 
   /**
-   * @var \Drupal\data_model\SchemaFactory
+   * @var \Drupal\schemata\SchemaFactory
    */
   protected $schemaFactory;
 
@@ -32,7 +32,7 @@ class Controller extends ControllerBase {
    * Controller constructor.
    *
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-   * @param \Drupal\data_model\SchemaFactory $typed_data_manager
+   * @param \Drupal\schemata\SchemaFactory $typed_data_manager
    * @param \Drupal\Core\Cache\CacheableResponse $response
    */
   public function __construct(SerializerInterface $serializer, SchemaFactory $schema_factory, CacheableResponseInterface $response) {
@@ -47,7 +47,7 @@ class Controller extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('serializer'),
-      $container->get('data_model.schema_factory'),
+      $container->get('schemata.schema_factory'),
       new CacheableResponse()
     );
   }

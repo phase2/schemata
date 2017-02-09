@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model_json_schema\Normalizer\jsonapi;
+namespace Drupal\schemata_json_schema\Normalizer\jsonapi;
 
 use \Drupal\Core\Field\FieldStorageDefinitionInterface;
 

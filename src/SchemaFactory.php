@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model;
+namespace Drupal\schemata;
 
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Entity\EntityTypeManager;
@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\TypedData\TypedDataManager;
 
 /**
- * Create an object of type Drupal\data_model\Schema\SchemaInterface.
+ * Create an object of type Drupal\schemata\Schema\SchemaInterface.
  *
  * Identifying a specific classed object to use is currently handled by a
  * mapping function in the create() method. Swapping out different
@@ -74,7 +74,7 @@ class SchemaFactory {
    * @param string $described_media_type
    *   The media type of the data being described. Ex: application/vnd.api+json.
    *
-   * @return \Drupal\data_model\Schema\Schema
+   * @return \Drupal\schemata\Schema\Schema
    *   A Schema object which can be processed as a Rest Resource response.
    *   This will likely be converted into an interface or base class here.
    */
@@ -106,10 +106,10 @@ class SchemaFactory {
       $this->typedDataManager->createDataDefinition("entity:" . $entity_type . ":" . $bundle);
 
     if ($entity_type == 'node' && !empty($bundle)) {
-      $class = '\Drupal\data_model\Schema\NodeSchema';
+      $class = '\Drupal\schemata\Schema\NodeSchema';
     }
     else {
-      $class = '\Drupal\data_model\Schema\Schema';
+      $class = '\Drupal\schemata\Schema\Schema';
     }
 
     $schema = new $class(

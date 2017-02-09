@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Drupal\data_model\Routing;
+namespace Drupal\schemata\Routing;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -25,7 +25,7 @@ class Routes implements ContainerInjectionInterface {
    *
    * @var string
    */
-  const CONTROLLER = '\Drupal\data_model\Controller\Controller::serialize';
+  const CONTROLLER = '\Drupal\schemata\Controller\Controller::serialize';
 
   /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -73,8 +73,8 @@ class Routes implements ContainerInjectionInterface {
       $bundles_info = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
       foreach (array_keys($bundles_info) as $bundle) {
         $path = $has_bundle ?
-          sprintf('/data-model/%s/%s', $entity_type_id, $bundle) :
-          sprintf('/data-model/%s', $entity_type_id);
+          sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
+          sprintf('/schemata/%s', $entity_type_id);
         $route = new Route($path);
         $route->setRequirement('_permission', 'access data models');
         $route->setMethods(['GET']);
@@ -84,8 +84,8 @@ class Routes implements ContainerInjectionInterface {
           RouteObjectInterface::CONTROLLER_NAME => static::CONTROLLER,
         ]);
         $route_name = $has_bundle ?
-          sprintf('data-model.%s:%s', $entity_type_id, $bundle) :
-          sprintf('data-model.%s', $entity_type_id);
+          sprintf('schemata.%s:%s', $entity_type_id, $bundle) :
+          sprintf('schemata.%s', $entity_type_id);
         $route_collection->add($route_name, $route);
       }
     }

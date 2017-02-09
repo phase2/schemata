@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model_json_schema\Normalizer\hal;
+namespace Drupal\schemata_json_schema\Normalizer\hal;
 
 /**
  * Passes reference handling to DataReferenceDefinitionHalNormalizer.
@@ -19,7 +19,7 @@ trait ReferenceListTrait {
       return parent::normalize($entity, $format, $context);
     }
 
-    // Unlike Drupal\data_model_json_schema\Normalizer\json\ListDataDefinitionNormalizer, this
+    // Unlike Drupal\schemata_json_schema\Normalizer\json\ListDataDefinitionNormalizer, this
     // does not return the nested value into the property's 'items' attribute.
     // Instead it returns the normalized reference definition to be merged at
     // the normalized object root. This means the item definition referred to

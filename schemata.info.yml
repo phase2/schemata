@@ -1,6 +1,6 @@
-name: Data Model
+name: Schemata
 type: module
-description: Provides a data models for entity types and bundles.
+description: Provide schema definitions of Drupal entities for type validation, code generation, and documentation.
 core: 8.x
 package: Web services
 dependencies:

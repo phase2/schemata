@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model\Normalizer;
+namespace Drupal\schemata\Normalizer;
 
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\serialization\Normalizer\NormalizerBase as SerializationNormalizerBase;

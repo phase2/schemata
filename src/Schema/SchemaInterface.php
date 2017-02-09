@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model\Schema;
+namespace Drupal\schemata\Schema;
 
 /**
  * Requirements for a Schema to interact with Schema utilities and serializers.

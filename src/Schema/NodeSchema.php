@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\data_model\Schema;
+namespace Drupal\schemata\Schema;
 
 use Drupal\node\Entity\NodeType;
 use Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface;

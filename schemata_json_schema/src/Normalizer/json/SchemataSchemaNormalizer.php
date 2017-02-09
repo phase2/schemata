@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\data_model_json_schema\Normalizer\json;
+namespace Drupal\schemata_json_schema\Normalizer\json;
 
 use Drupal\Core\Url;
-use Drupal\data_model\Schema\SchemaInterface;
+use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\Component\Utility\NestedArray;
 
 /**
@@ -16,7 +16,7 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
    *
    * @var string
    */
-  protected $supportedInterfaceOrClass = 'Drupal\data_model\Schema\SchemaInterface';
+  protected $supportedInterfaceOrClass = 'Drupal\schemata\Schema\SchemaInterface';
 
   /**
    * {@inheritdoc}
@@ -25,10 +25,10 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
     $entity_type_id = $entity->getEntityTypeId();
     $bundle = $entity->getBundleId();
     // Create the array of normalized fields, starting with the URI.
-    /* @var $entity \Drupal\data_model\Schema\SchemaInterface */
+    /* @var $entity \Drupal\schemata\Schema\SchemaInterface */
     $route_name = $bundle ?
-      sprintf('data-model.%s:%s', $entity_type_id, $bundle) :
-      sprintf('data-model.%s', $entity_type_id);
+      sprintf('schemata.%s:%s', $entity_type_id, $bundle) :
+      sprintf('schemata.%s', $entity_type_id);
     $generated_url = Url::fromRoute($route_name, [], ['absolute' => TRUE])
       ->toString(TRUE);
     $normalized = [
@@ -61,7 +61,7 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
    * Schema serializer already has logic to drop any properties that are empty
    * values after processing, but this allows cleaner, centralized logic.
    *
-   * @param \Drupal\data_model\Schema\SchemaInterface $entity
+   * @param \Drupal\schemata\Schema\SchemaInterface $entity
    *   The Schema object whose properties the serializer will present.
    * @param string $format
    *   The serializer format. Defaults to NULL.

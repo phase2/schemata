@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\data_model_json_schema\Normalizer\json;
+namespace Drupal\schemata_json_schema\Normalizer\json;
 
-use Drupal\data_model\Normalizer\NormalizerBase;
+use Drupal\schemata\Normalizer\NormalizerBase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
