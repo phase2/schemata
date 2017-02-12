@@ -16,8 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * This is slightly different from the behavior of the fallback plugin, which
  * uses the data type off the DataDefinition.
  *
- * @see \Drupal\json_schema\Plugin\TypeMapperPluginManager
- * @see \Drupal\json_schema\Plugin\json_schema\type_mapper\FallbackTypeMapper
+ * @see \Drupal\schemata_json_schema\Plugin\Type\TypeMapperPluginManager
+ * @see \Drupal\schemata_json_schema\Plugin\type_mapper\FallbackTypeMapper
  */
 class TypeMapperBase extends PluginBase implements TypeMapperInterface, ContainerFactoryPluginInterface {
 
