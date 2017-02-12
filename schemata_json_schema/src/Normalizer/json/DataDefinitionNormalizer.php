@@ -75,56 +75,9 @@ class DataDefinitionNormalizer extends JsonNormalizerBase {
    *   Discrete values of the property definition
    */
   protected function extractPropertyData(DataDefinitionInterface $property, array $context = []) {
-    $data = [
-      // 'constraints' => print_r($property->getConstraints(), TRUE),
-      // 'settings' => print_r($property->getSettings(), TRUE),
-      // 'class' => get_class($Property),
-      // 'computed' => $property->isComputed(),
-    ];
-
-    if ($item = $property->getLabel()) {
-      $data['title'] = $item;
-    }
-    if ($item = $property->getDescription()) {
-      $data['description'] = $item;
-    }
-
-    $type = $property->getDataType();
-    switch ($type) {
-      case 'email':
-        $data['type'] = 'string';
-        $data['format'] = 'email';
-        break;
-
-      case 'datetime_iso8601':
-        $data['type'] = 'string';
-        $data['format'] = 'date';
-        break;
-
-      case 'timestamp':
-        $data['type'] = 'number';
-        $data['format'] = 'utc-millisec';
-        break;
-
-      case 'filter_format':
-        // @todo machine_name format or regex validation.
-        $data['type'] = 'string';
-        break;
-
-      case 'entity_reference':
-        $data['type'] = 'object';
-        break;
-
-      default:
-        $data['type'] = $type;
-
-    }
-
-    if (isset($context['parent']) && $context['parent']->getDataType() == 'field_item:uuid') {
-      $data['format'] = 'uuid';
-    }
-
-    return $data;
+    return \Drupal::service('plugin.manager.json_schema.type_mapper')
+      ->createInstance($property->getDataType())
+      ->getMappedValue($property);
   }
 
 }
