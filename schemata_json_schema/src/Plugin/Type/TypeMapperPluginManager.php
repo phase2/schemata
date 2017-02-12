@@ -10,9 +10,9 @@ use Drupal\Component\Plugin\FallbackPluginManagerInterface;
  *
  * TypeMappers are used to adapt Drupal TypedData types to JSON Schema specs.
  *
- * @see \Drupal\json_schema\Annotation\TypeMapper
- * @see \Drupal\json_schema\Plugin\TypeMapperBase
- * @see \Drupal\json_schema\Plugin\TypeMapperInterface
+ * @see \Drupal\schemata_json_schema\Annotation\TypeMapper
+ * @see \Drupal\schemata_json_schema\Plugin\type_mapper\TypeMapperBase
+ * @see \Drupal\schemata_json_schema\Plugin\type_mapper\TypeMapperInterface
  * @see plugin_api
  */
 class TypeMapperPluginManager extends DefaultPluginManager implements FallbackPluginManagerInterface {
@@ -34,7 +34,7 @@ class TypeMapperPluginManager extends DefaultPluginManager implements FallbackPl
    *   The module handler to invoke the alter hook with.
    */
   public function __construct(\Traversable $namespaces, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/json_schema/type_mapper', $namespaces, $module_handler, 'Drupal\json_schema\Plugin\TypeMapperInterface', 'Drupal\json_schema\Annotation\TypeMapper');
+    parent::__construct('Plugin/type_mapper', $namespaces, $module_handler, 'Drupal\schemata_json_schema\Plugin\type_mapper\TypeMapperInterface', 'Drupal\schemata_json_schema\Annotation\TypeMapper');
   }
 
   /**
