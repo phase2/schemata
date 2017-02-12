@@ -120,3 +120,7 @@ services:
     class: Drupal\schemata_json_schema\Normalizer\hal\DataDefinitionNormalizer
     tags:
       - { name: normalizer, priority: 10 }
+
+  plugin.manager.json_schema.type_mapper:
+    class: Drupal\schemata_json_schema\Plugin\Type\TypeMapperPluginManager
+    arguments: ['@container.namespaces', '@module_handler']
