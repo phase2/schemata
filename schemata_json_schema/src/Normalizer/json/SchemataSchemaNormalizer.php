@@ -5,6 +5,7 @@ namespace Drupal\schemata_json_schema\Normalizer\json;
 use Drupal\Core\Url;
 use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\schemata\SchemaUrl;
 
 /**
  * Primary normalizer for SchemaInterface objects.
@@ -22,15 +23,10 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($entity, $format = NULL, array $context = []) {
-    $entity_type_id = $entity->getEntityTypeId();
-    $bundle = $entity->getBundleId();
-    // Create the array of normalized fields, starting with the URI.
     /* @var $entity \Drupal\schemata\Schema\SchemaInterface */
-    $route_name = $bundle ?
-      sprintf('schemata.%s:%s', $entity_type_id, $bundle) :
-      sprintf('schemata.%s', $entity_type_id);
-    $generated_url = Url::fromRoute($route_name, [], ['absolute' => TRUE])
+    $generated_url = SchemaUrl::fromSchema('schema_json', $entity)
       ->toString(TRUE);
+    // Create the array of normalized fields, starting with the URI.
     $normalized = [
       '$schema' => 'http://json-schema.org/draft-04/schema#',
       'id' => $generated_url->getGeneratedUrl(),
@@ -39,8 +35,8 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
     $normalized = array_merge($normalized, $entity->getMetadata());
 
     // Stash schema request parameters.
-    $context['entityTypeId'] = $entity_type_id;
-    $context['bundleId'] = $bundle;
+    $context['entityTypeId'] = $entity->getEntityTypeId();
+    $context['bundleId'] = $entity->getBundleId();
 
     // Retrieve 'properties' and possibly 'required' nested arrays.
     $properties = $this->normalizeProperties(
