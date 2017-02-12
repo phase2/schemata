@@ -6,7 +6,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 
 /**
- * Adds api_json as known format.
+ * Adds schema_json as known format.
  */
 class SchemataServiceProvider implements ServiceModifierInterface {
 
