@@ -75,7 +75,7 @@ class DataDefinitionNormalizer extends JsonNormalizerBase {
    *   Discrete values of the property definition
    */
   protected function extractPropertyData(DataDefinitionInterface $property, array $context = []) {
-    return \Drupal::service('plugin.manager.json_schema.type_mapper')
+    return \Drupal::service('plugin.manager.schemata_json_schema.type_mapper')
       ->createInstance($property->getDataType())
       ->getMappedValue($property);
   }
