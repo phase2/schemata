@@ -19,13 +19,18 @@ class SchemaUrl {
    *
    * @param string $format
    *   The format or type of schema.
+   * @param string $describes
+   *   The format being described.
+   * @param SchemaInterface $schema
+   *   The schema for which we generate the link.
    *
    * @return \Drupal\Core\Url
    *   The schema resource Url object.
    */
-  public static function fromSchema($format, SchemaInterface $schema) {
+  public static function fromSchema($format, $describes, SchemaInterface $schema) {
     return static::fromOptions(
       $format,
+      $describes,
       $schema->getEntityTypeId(),
       $schema->getBundleId()
     );
@@ -36,6 +41,8 @@ class SchemaUrl {
    *
    * @param string $format
    *   The format or type of schema.
+   * @param string $describes
+   *   The format being described.
    * @param string $entity_type_id
    *   The entity type.
    * @param string $bundle
@@ -44,7 +51,7 @@ class SchemaUrl {
    * @return \Drupal\Core\Url
    *   The schema resource Url object.
    */
-  public static function fromOptions($format, $entity_type_id, $bundle = NULL) {
+  public static function fromOptions($format, $describes, $entity_type_id, $bundle = NULL) {
     $route = sprintf('schemata.%s:%s', $entity_type_id, $bundle);
     $parameters = ['entity_type' => $entity_type_id];
     if (empty($bundle)) {
@@ -55,6 +62,7 @@ class SchemaUrl {
     return Url::fromRoute($route, $parameters, [
       'query' => [
         '_format' => $format,
+        '_describes' => $describes,
       ],
       'absolute' => TRUE,
     ]);

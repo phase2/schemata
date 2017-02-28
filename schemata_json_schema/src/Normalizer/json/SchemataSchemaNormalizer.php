@@ -24,7 +24,7 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
    */
   public function normalize($entity, $format = NULL, array $context = []) {
     /* @var $entity \Drupal\schemata\Schema\SchemaInterface */
-    $generated_url = SchemaUrl::fromSchema('schema_json', $entity)
+    $generated_url = SchemaUrl::fromSchema($this->format, $this->describedFormat, $entity)
       ->toString(TRUE);
     // Create the array of normalized fields, starting with the URI.
     $normalized = [

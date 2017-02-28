@@ -98,16 +98,16 @@ class DataReferenceDefinitionNormalizer extends JsonDataReferenceDefinitionNorma
     // Add Schema resource references.
     $item = &$normalized['_embedded'][$field_uri]['items'];
     if (empty($target_bundles)) {
-      $item['$ref'] = SchemaUrl::fromOptions($format, $target_type)->toString();
+      $item['$ref'] = SchemaUrl::fromOptions($this->format, $this->describedFormat, $target_type)->toString();
     }
     elseif (count($target_bundles) == 1) {
-      $item['$ref'] = SchemaUrl::fromOptions($format, $target_type, reset($target_bundles))->toString();
+      $item['$ref'] = SchemaUrl::fromOptions($this->format, $this->describedFormat, $target_type, reset($target_bundles))->toString();
     }
     elseif (count($target_bundles) > 1) {
       $refs = [];
       foreach ($target_bundles as $bundle) {
         $refs[] = [
-          '$ref' => SchemaUrl::fromOptions($format, $target_type, $bundle)
+          '$ref' => SchemaUrl::fromOptions($this->format, $this->describedFormat, $target_type, $bundle)
             ->toString(),
         ];
       }
