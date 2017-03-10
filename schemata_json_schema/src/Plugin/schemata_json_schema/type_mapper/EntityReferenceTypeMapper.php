@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\schemata_json_schema\Plugin\type_mapper;
+namespace Drupal\schemata_json_schema\Plugin\schemata_json_schema\type_mapper;
 
 use Drupal\Core\TypedData\DataDefinitionInterface;
 

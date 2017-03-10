@@ -76,7 +76,7 @@ class Routes implements ContainerInjectionInterface {
           sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
           sprintf('/schemata/%s', $entity_type_id);
         $route = new Route($path);
-        $route->setRequirement('_permission', 'access data models');
+        $route->setRequirement('_permission', 'access schemata data models');
         $route->setMethods(['GET']);
         $route->setDefaults([
           'entity_type_id' => $entity_type_id,

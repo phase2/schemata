@@ -2,7 +2,6 @@
 
 namespace Drupal\schemata_json_schema\Normalizer\jsonapi;
 
-use Drupal\Core\Url;
 use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\schemata\SchemaUrl;

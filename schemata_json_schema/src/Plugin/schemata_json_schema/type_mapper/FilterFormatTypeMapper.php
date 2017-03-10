@@ -1,24 +1,24 @@
 <?php
 
-namespace Drupal\schemata_json_schema\Plugin\type_mapper;
+namespace Drupal\schemata_json_schema\Plugin\schemata_json_schema\type_mapper;
 
 use Drupal\Core\TypedData\DataDefinitionInterface;
 
 /**
- * The fallback type mapper, explicitly called if none other is applicable.
+ * Converts Data Definition properties of filter_format type to JSON Schema.
  *
  * @TypeMapper(
- *  id = "fallback"
+ *  id = "filter_format"
  * )
  */
-class FallbackTypeMapper extends TypeMapperBase {
+class FilterFormatTypeMapper extends TypeMapperBase {
 
   /**
    * {@inheritdoc}
    */
   public function getMappedValue(DataDefinitionInterface $property) {
     $value = parent::getMappedValue($property);
-    $value['type'] = $property->getDataType();
+    $value['type'] = 'string';
     return $value;
   }
 

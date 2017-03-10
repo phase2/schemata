@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\schemata_json_schema\Plugin\type_mapper;
+namespace Drupal\schemata_json_schema\Plugin\schemata_json_schema\type_mapper;
 
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\TypedData\DataDefinitionInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * uses the data type off the DataDefinition.
  *
  * @see \Drupal\schemata_json_schema\Plugin\Type\TypeMapperPluginManager
- * @see \Drupal\schemata_json_schema\Plugin\type_mapper\FallbackTypeMapper
+ * @see \Drupal\schemata_json_schema\Plugin\schemata_json_schema\type_mapper\FallbackTypeMapper
  */
 class TypeMapperBase extends PluginBase implements TypeMapperInterface, ContainerFactoryPluginInterface {
 

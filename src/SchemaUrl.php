@@ -52,14 +52,11 @@ class SchemaUrl {
    *   The schema resource Url object.
    */
   public static function fromOptions($format, $describes, $entity_type_id, $bundle = NULL) {
-    $route = sprintf('schemata.%s:%s', $entity_type_id, $bundle);
-    $parameters = ['entity_type' => $entity_type_id];
-    if (empty($bundle)) {
-      $route = sprintf('schemata.%s', $entity_type_id);
-      $parameters['bundle'] = $bundle;
-    }
+    $route_name = empty($bundle)
+      ? sprintf('schemata.%s', $entity_type_id)
+      : sprintf('schemata.%s:%s', $entity_type_id, $bundle);
 
-    return Url::fromRoute($route, $parameters, [
+    return Url::fromRoute($route_name, [], [
       'query' => [
         '_format' => $format,
         '_describes' => $describes,
