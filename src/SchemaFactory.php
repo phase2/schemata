@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\TypedData\TypedDataManager;
 
 /**
- * Create an object of type Drupal\Schemata\Schema\SchemaInterface.
+ * Create an object of type Drupal\schemata\Schema\SchemaInterface.
  *
  * Identifying a specific classed object to use is currently handled by a
  * mapping function in the create() method. Swapping out different
@@ -71,6 +71,8 @@ class SchemaFactory {
    * @param string $bundle
    *   URL input specifying an entity bundle to be processed. May be NULL
    *   for support of entities that do not have bundles.
+   * @param string $described_media_type
+   *   The media type of the data being described. Ex: application/vnd.api+json.
    *
    * @return \Drupal\schemata\Schema\Schema
    *   A Schema object which can be processed as a Rest Resource response.
@@ -82,27 +84,26 @@ class SchemaFactory {
       $this->logger->warning('Invalid Entity Type "%entity_type" specified.', [
         '%entity_type' => $entity_type,
       ]);
-      return [];
+      return NULL;
     }
     elseif (!($entity_type_plugin->isSubclassOf('\Drupal\Core\Entity\ContentEntityInterface'))) {
-      $this->logger->warning('Only Content Entities are supported.');
-      return [];
+      $this->logger->warning('Only Content Entities are supported for now.');
+      return NULL;
     }
 
-    $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type);
+    if ($entity_type_plugin->getBundleEntityType()) {
+      $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type);
+    }
     if (!empty($bundle) && !array_key_exists($bundle, $bundles)) {
       $this->logger->warning('Specified Entity Bundle "%bundle" does not exist.', [
         '%bundle' => $bundle,
       ]);
-      return [];
+      return NULL;
     }
 
-    if (!empty($bundle)) {
-      $data_definition = $this->typedDataManager->createDataDefinition("entity:" . $entity_type . ":" . $bundle);
-    }
-    else {
-      $data_definition = $this->typedDataManager->createDataDefinition("entity:" . $entity_type);
-    }
+    $data_definition = empty($bundle) ?
+      $this->typedDataManager->createDataDefinition("entity:" . $entity_type) :
+      $this->typedDataManager->createDataDefinition("entity:" . $entity_type . ":" . $bundle);
 
     if ($entity_type == 'node' && !empty($bundle)) {
       $class = '\Drupal\schemata\Schema\NodeSchema';

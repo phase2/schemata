@@ -8,7 +8,7 @@ class and exactly like an XML DTD describes an XML document. This project uses
 Drupal's new Typed Data system to faciliate the creation of schemas for your
 site.
 
-This is especially powerful in conjunction with the Drupal REST system, as your
+This is especially powerful in conjunction with the Drupal router, as your
 content model schemata can help with testing, client code generation,
 documentation generation, and more, especially in conjunction with external
 tools that process schemas.
@@ -19,7 +19,7 @@ All Entity Types and Bundles have a schema automatically via the Schemata module
 
 ## Where is the Schema?
 
-Schemata are accessed via REST endpoints. Once enabled, Schemata resources are
+Schemata are accessed via regular routes. Once enabled, Schemata resources are
 found at `/schemata/{entity_type}/{bundle?}`. These resources are dynamically
 generated based on the Typed Data Definition system in Drupal core, which means
 any change to fields on an Entity will automatically be reflected in the schema.
@@ -28,15 +28,13 @@ any change to fields on an Entity will automatically be reflected in the schema.
 
 Schema will only apply if [Issue #2751325: Specifically-typed properties in json output](https://www.drupal.org/node/2751325)
 is fixed or patched in your Drupal instance. Otherwise your serialized API
-output for JSON and HAL will only produce string values.
+output for JSON, HAL and JSON API will only produce string values.
 
 Schemata-the-module is a dependency for the sub-modules of the project:
 
 * **JSON Schema**: A serializer which processes Schemata schema objects into
   [JSON Schema v4](http://json-schema.org). Describes the output of content 
-  entities via the core JSON serializer.
-* **HAL JSON Schema**: A serializer which builds on JSON Schema serializer to
-  describe the output of content entities via the core HAL JSON serializer.
+  entities via the core JSON, HAL and JSON API serializers.
 
 From a "product" standpoint, JSON Schema is the valuable thing, and Schemata
 the technical dependency. Only install Schemata if you plan to install a
@@ -44,8 +42,8 @@ serializer that can do something with it
 
 ## Architecture
 
-The Schemata project contains the Schemata module. The module provides REST
-endpoints to retrieve a schema object. The Schema is assembled by Drupal based
+The Schemata project contains the Schemata module. The module provides routes to
+retrieve a schema object. The Schema is assembled by Drupal based
 on the [Typed Data API](https://www.drupal.org/node/1794140), configuration,
 and in the future, router introspection. The resulting Schema object can then
 be requested via a GET request using a `_format` parameter to select a
@@ -56,13 +54,45 @@ implementations of the Drupal\schemata\Schema\SchemaInterface class. At this
 time, the only serializer support for Schemata is within this project, you can
 see an example of this in the packaged submodule **JSON Schema**.
 
-## Configuration
+## Usage
 
-* Enable the Schemata module and a Schemata Serializer. For now, that means the
-  JSON Schema module.
-* Enable both Schemata resources with the json_schema format.
-* Grant permission to access the schemata resources to roles that need it.
-* Visit a URL such as `/schemata/user?_format=json_schema` to see it.
+You can obtain the schema either making a request to an exposed route or by
+using the programmatic API.
+
+Each output format should be contained in its own submodule. Enable the
+submodule for the format that you need first. For instance:
+
+```
+drush en -y schemata_json_schema
+```
+
+Finally you need to grant permission to access the data models to roles that
+need it.
+
+### Request
+Create a request against `/schemata/{entity_type}/{bundle}?_format={output_format}&_describes={described_format}`
+For instance:
+
+  * `/schemata/node/article?_format=schema_json&_describes=api_json`
+  * `/schemata/user?_format=schema_json&_describes=api_json` (omit the bundle
+  if the entity type has no bundles).
+
+### Programmatically
+```php
+// Input variables.
+$entity_type_id = 'node';
+$bundle = 'article';
+$output_format = 'schema_json';
+$described_format = 'api_json';
+
+$schema_factory = \Drupal::service('schemata.schema_factory');
+$serializer = \Drupal::service('serializer');
+$schema = $schema_factory->create($entity_type_id, $bundle);
+$format = $output_format . ':' . $described_format;
+
+// Output.
+$serializer->serialize($schema, $format);
+```
 
 ## Security
 
@@ -91,12 +121,12 @@ and the GraphQL sponsors.
 
 This module can be summarized as follows:
 
-A Drupal 8 subsystem (REST) and a Symfony subsystem (Serialization) use a touchy
+A Drupal 8 subsystem (routing) and a Symfony subsystem (Serialization) use a touchy
 Drupal 8 subsystem (Typed Data) to describe the output of another Drupal 8
 subsystem (Entity).
 
 It gets worse--the use cases of this module are most applicable when said entity
-output comes by way of the REST and Serialization systems.
+output comes by way of the routing and Serialization systems.
 
 It does not make sense to discuss a backport unless you first backport large
 swathes of Drupal 8.

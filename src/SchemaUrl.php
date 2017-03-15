@@ -19,13 +19,18 @@ class SchemaUrl {
    *
    * @param string $format
    *   The format or type of schema.
+   * @param string $describes
+   *   The format being described.
+   * @param SchemaInterface $schema
+   *   The schema for which we generate the link.
    *
    * @return \Drupal\Core\Url
    *   The schema resource Url object.
    */
-  public static function fromSchema($format, SchemaInterface $schema) {
+  public static function fromSchema($format, $describes, SchemaInterface $schema) {
     return static::fromOptions(
       $format,
+      $describes,
       $schema->getEntityTypeId(),
       $schema->getBundleId()
     );
@@ -36,7 +41,9 @@ class SchemaUrl {
    *
    * @param string $format
    *   The format or type of schema.
-   * @param string $entity_type
+   * @param string $describes
+   *   The format being described.
+   * @param string $entity_type_id
    *   The entity type.
    * @param string $bundle
    *   The entity bundle.
@@ -44,20 +51,15 @@ class SchemaUrl {
    * @return \Drupal\Core\Url
    *   The schema resource Url object.
    */
-  public static function fromOptions($format, $entity_type, $bundle = NULL) {
-    $route = empty($bundle) ? 'rest.schemata_entity_base.GET.' . $format
-      : 'rest.schemata_entity_bundle.GET.' . $format;
+  public static function fromOptions($format, $describes, $entity_type_id, $bundle = NULL) {
+    $route_name = empty($bundle)
+      ? sprintf('schemata.%s', $entity_type_id)
+      : sprintf('schemata.%s:%s', $entity_type_id, $bundle);
 
-    $parameters = [
-      'entity_type' => $entity_type,
-    ];
-    if (isset($bundle)) {
-      $parameters['bundle'] = $bundle;
-    }
-
-    return Url::fromRoute($route, $parameters, [
+    return Url::fromRoute($route_name, [], [
       'query' => [
         '_format' => $format,
+        '_describes' => $describes,
       ],
       'absolute' => TRUE,
     ]);

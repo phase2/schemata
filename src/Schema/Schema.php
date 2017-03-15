@@ -58,10 +58,12 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
   /**
    * Creates a Schema object.
    *
-   * @param Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface $entity_type
+   * @param \Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface $entity_type
    *   The Entity Type definition.
    * @param string $bundle
    *   The Bundle data definition.
+   * @param string $described_media_type
+   *   The media type of the data being described. Ex: application/vnd.api+json.
    * @param \Drupal\Core\TypedData\DataDefinitionInterface[] $properties
    *   Typed data properties for the schema's initial creation.
    */

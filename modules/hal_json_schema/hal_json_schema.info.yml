@@ -1,9 +1,0 @@
-name: HAL JSON Schema
-type: module
-description: Provides a Schemata Serializer to generate JSON Schema v4 for HAL output.
-core: 8.x
-package: Web services
-dependencies:
-  - json_schema
-  - rest
-  - hal
