@@ -68,29 +68,60 @@ class Routes implements ContainerInjectionInterface {
     // Loop through all the entity types.
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type) {
       $entity_type_id = $entity_type->id();
-      $has_bundle = (bool) $entity_type->getBundleEntityType();
-      // Loop through all the bundles for the entity type.
-      $bundles_info = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
-      foreach (array_keys($bundles_info) as $bundle) {
-        $path = $has_bundle ?
-          sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
-          sprintf('/schemata/%s', $entity_type_id);
-        $route = new Route($path);
-        $route->setRequirement('_permission', 'access schemata data models');
-        $route->setMethods(['GET']);
-        $route->setDefaults([
-          'entity_type_id' => $entity_type_id,
-          'bundle' => $has_bundle ? $bundle : NULL,
-          RouteObjectInterface::CONTROLLER_NAME => static::CONTROLLER,
-        ]);
-        $route_name = $has_bundle ?
-          sprintf('schemata.%s:%s', $entity_type_id, $bundle) :
-          sprintf('schemata.%s', $entity_type_id);
-        $route_collection->add($route_name, $route);
+      // Add a route for all entity types.
+      $route_collection->add($this->createRouteName($entity_type_id), $this->createRoute($entity_type_id));
+
+      // If this entity type supports bundles then add a route for each bundle.
+      if ($entity_type->getBundleEntityType()) {
+        // Loop through all the bundles for the entity type.
+        $bundles_info = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
+        foreach (array_keys($bundles_info) as $bundle) {
+          $route_collection->add($this->createRouteName($entity_type_id, $bundle), $this->createRoute($entity_type_id, $bundle));
+        }
       }
     }
-
     return $route_collection;
+  }
+
+  /**
+   * Creates a route for a entity type and bundle.
+   *
+   * @param string $entity_type_id
+   *   The entity type id.
+   * @param string $bundle
+   *   The bundle name.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The route.
+   */
+  protected function createRoute($entity_type_id, $bundle = NULL) {
+    $path = $bundle ?
+      sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
+      sprintf('/schemata/%s', $entity_type_id);
+    $route = new Route($path);
+    $route->setRequirement('_permission', 'access schemata data models');
+    $route->setMethods(['GET']);
+    $route->setDefaults([
+      'entity_type_id' => $entity_type_id,
+      'bundle' => $bundle ? $bundle : NULL,
+      RouteObjectInterface::CONTROLLER_NAME => static::CONTROLLER,
+    ]);
+    return $route;
+  }
+
+  /**
+   * Creates a route name for a entity type and bundle.
+   *
+   * @param string $entity_type_id
+   *   The entity type id.
+   * @param string $bundle
+   *   The bundle name.
+   *
+   * @return string
+   *   The route name.
+   */
+  protected function createRouteName($entity_type_id, $bundle = NULL) {
+    return $bundle ? sprintf('schemata.%s:%s', $entity_type_id, $bundle) : sprintf('schemata.%s', $entity_type_id);
   }
 
 }
