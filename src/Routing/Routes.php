@@ -95,17 +95,18 @@ class Routes implements ContainerInjectionInterface {
    *   The route.
    */
   protected function createRoute($entity_type_id, $bundle = NULL) {
-    $path = $bundle ?
-      sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
-      sprintf('/schemata/%s', $entity_type_id);
+    $path = $this->getRoutePath($entity_type_id, $bundle);
     $route = new Route($path);
     $route->setRequirement('_permission', 'access schemata data models');
     $route->setMethods(['GET']);
-    $route->setDefaults([
+    $defaults = [
       'entity_type_id' => $entity_type_id,
-      'bundle' => $bundle ? $bundle : NULL,
       RouteObjectInterface::CONTROLLER_NAME => static::CONTROLLER,
-    ]);
+    ];
+    if ($bundle) {
+      $defaults['bundle'] = $bundle;
+    }
+    $route->setDefaults($defaults);
     return $route;
   }
 
@@ -122,6 +123,24 @@ class Routes implements ContainerInjectionInterface {
    */
   protected function createRouteName($entity_type_id, $bundle = NULL) {
     return $bundle ? sprintf('schemata.%s:%s', $entity_type_id, $bundle) : sprintf('schemata.%s', $entity_type_id);
+  }
+
+  /**
+   * Creates a route path for a entity type and bundle.
+   *
+   * @param string $entity_type_id
+   *   The entity type id.
+   * @param string $bundle
+   *   The bundle name.
+   *
+   * @return string
+   *   The route path.
+   */
+  protected function getRoutePath($entity_type_id, $bundle = NULL) {
+    $path = $bundle ?
+      sprintf('/schemata/%s/%s', $entity_type_id, $bundle) :
+      sprintf('/schemata/%s', $entity_type_id);
+    return $path;
   }
 
 }
