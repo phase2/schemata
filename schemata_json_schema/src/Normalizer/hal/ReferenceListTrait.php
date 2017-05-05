@@ -12,7 +12,7 @@ trait ReferenceListTrait {
   /**
    * {@inheritdoc}
    */
-  public function normalize($entity, $format = NULL, array $context = array()) {
+  public function normalize($entity, $format = NULL, array $context = []) {
     /* @var $entity \Drupal\Core\TypedData\ListDataDefinitionInterface */
     // If this list does not wrap a reference, revert to standard JSON behavior.
     if (!$this->isReferenceField($entity)) {
