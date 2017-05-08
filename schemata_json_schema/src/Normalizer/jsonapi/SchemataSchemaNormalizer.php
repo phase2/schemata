@@ -66,7 +66,7 @@ class SchemataSchemaNormalizer extends JsonApiNormalizerBase {
    * @return \Drupal\Core\TypedData\DataDefinitionInterface[]
    *   The DataDefinitions to be processed.
    */
-  protected static function getProperties(SchemaInterface $entity, $format = NULL, $context = []) {
+  protected static function getProperties(SchemaInterface $entity, $format = NULL, array $context = []) {
     return $entity->getProperties();
   }
 

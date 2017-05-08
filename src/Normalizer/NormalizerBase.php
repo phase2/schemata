@@ -46,7 +46,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Den
    *   - properties: The array of all normalized properties.
    *   - required: The array of required properties by name.
    */
-  protected function normalizeProperties($items, $format, $context = []) {
+  protected function normalizeProperties(array $items, $format, array $context = []) {
     $normalized = [];
     foreach ($items as $name => $property) {
       $context['name'] = $name;

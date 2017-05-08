@@ -3,7 +3,7 @@
 namespace Drupal\schemata_json_schema\Normalizer\jsonapi;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
-use \Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 
@@ -24,14 +24,17 @@ class RelationshipFieldDefinitionNormalizer extends ListDataDefinitionNormalizer
   protected $supportedInterfaceOrClass = '\Drupal\Core\Field\FieldDefinitionInterface';
 
   /**
-   * @var \Drupal\Core\Field\FieldTypePluginManager
+   * The field type plugin manager.
+   *
+   * @var \Drupal\Core\Field\FieldTypePluginManagerInterface
    */
   protected $fieldTypeManager;
 
   /**
    * RelationshipFieldDefinitionNormalizer constructor.
    *
-   * @param \Drupal\Core\Field\FieldTypePluginManager $field_type_manager
+   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_manager
+   *   The field type plugin manager.
    */
   public function __construct(FieldTypePluginManagerInterface $field_type_manager) {
     $this->fieldTypeManager = $field_type_manager;
@@ -84,6 +87,7 @@ class RelationshipFieldDefinitionNormalizer extends ListDataDefinitionNormalizer
    * Normalizes the relationship.
    *
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The field definition.
    *
    * @return array
    *   The normalized relationship.
@@ -95,7 +99,12 @@ class RelationshipFieldDefinitionNormalizer extends ListDataDefinitionNormalizer
       'required' => ['type', 'id'],
       'properties' => [
         'type' => ['type' => 'string', 'title' => t('Referenced resource')],
-        'id' => ['type' => 'string', 'title' => t('Resource ID'), 'format' => 'uuid', 'maxLength' => 128],
+        'id' => [
+          'type' => 'string',
+          'title' => t('Resource ID'),
+          'format' => 'uuid',
+          'maxLength' => 128,
+        ],
       ],
     ];
     // Handle the multivalue variant.
