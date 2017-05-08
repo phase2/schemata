@@ -96,7 +96,7 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function addProperties($properties) {
+  public function addProperties(array $properties) {
     $this->properties += $properties;
   }
 
