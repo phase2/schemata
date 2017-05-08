@@ -16,7 +16,7 @@ interface TypeMapperInterface {
    *   The data definition property.
    *
    * @return mixed
-   *  The mapped value to represent the property in a JSON Schema schema.
+   *   The mapped value to represent the property in a JSON Schema schema.
    */
   public function getMappedValue(DataDefinitionInterface $property);
 

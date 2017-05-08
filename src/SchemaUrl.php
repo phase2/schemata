@@ -21,7 +21,7 @@ class SchemaUrl {
    *   The format or type of schema.
    * @param string $describes
    *   The format being described.
-   * @param SchemaInterface $schema
+   * @param \Drupal\schemata\schema\SchemaInterface $schema
    *   The schema for which we generate the link.
    *
    * @return \Drupal\Core\Url

@@ -20,7 +20,7 @@ interface SchemaInterface {
    * @param \Drupal\Core\TypedData\DataDefinitionInterface[] $properties
    *   The property data definitions.
    */
-  public function addProperties($properties);
+  public function addProperties(array $properties);
 
   /**
    * Retrieve the Entity Type ID.

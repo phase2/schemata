@@ -2,7 +2,7 @@
 
 namespace Drupal\schemata_json_schema\Normalizer\json;
 
-use \Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Normalizer for FieldDefinitionInterface objects.

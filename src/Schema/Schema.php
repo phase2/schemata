@@ -30,9 +30,9 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
    *
    * Key methods for serialization includes getLabel() and id().
    *
-   * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21TypedData%21EntityDataDefinitionInterface.php/interface/EntityDataDefinitionInterface/8.1.x
-   *
    * @var \Drupal\Core\Entity\EntityTypeInterface
+   *
+   * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21TypedData%21EntityDataDefinitionInterface.php/interface/EntityDataDefinitionInterface/8.1.x
    */
   protected $entityType;
 
@@ -46,12 +46,12 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
   /**
    * Typed Data objects for all properties on the entity type/bundle.
    *
+   * @var \Drupal\Core\TypedData\DataDefinitionInterface[]
+   *
    * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21TypedData%21DataDefinitionInterface.php/interface/DataDefinitionInterface/8.1.x
    * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21TypedData%21ComplexDataDefinitionInterface.php/interface/ComplexDataDefinitionInterface/8.1.x
    * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21TypedData%21DataReferenceDefinitionInterface.php/interface/DataReferenceDefinitionInterface/8.1.x
    * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Field%21FieldDefinitionInterface.php/interface/FieldDefinitionInterface/8.1.x
-   *
-   * @var \Drupal\Core\TypedData\DataDefinitionInterface[]
    */
   protected $properties = [];
 
@@ -62,12 +62,10 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
    *   The Entity Type definition.
    * @param string $bundle
    *   The Bundle data definition.
-   * @param string $described_media_type
-   *   The media type of the data being described. Ex: application/vnd.api+json.
    * @param \Drupal\Core\TypedData\DataDefinitionInterface[] $properties
    *   Typed data properties for the schema's initial creation.
    */
-  public function __construct(EntityDataDefinitionInterface $entity_type, $bundle = NULL, $properties = []) {
+  public function __construct(EntityDataDefinitionInterface $entity_type, $bundle = NULL, array $properties = []) {
     $this->entityType = $entity_type;
     $this->bundle = $bundle;
     $this->addProperties($properties);
@@ -210,9 +208,6 @@ class Schema implements SchemaInterface, RefinableCacheableDependencyInterface {
    *
    * @param string $name
    *   The name of the property to get; e.g., 'title' or 'name'.
-   *
-   * @param \Drupal\Core\TypedData\DataDefinitionInterface
-   *   The property object.
    */
   public function __get($name) {
     $this->properties[$name] = $value;

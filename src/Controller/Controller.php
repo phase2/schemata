@@ -11,20 +11,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Contains callback methods for dynamic routes.
+ */
 class Controller extends ControllerBase {
 
   /**
+   * The serializer service.
+   *
    * @var \Symfony\Component\Serializer\SerializerInterface
    */
   protected $serializer;
 
   /**
+   * The schema factory.
+   *
    * @var \Drupal\schemata\SchemaFactory
    */
   protected $schemaFactory;
 
   /**
-   * @var \Drupal\Core\Cache\CacheableResponse
+   * The cacheable response.
+   *
+   * @var \Drupal\Core\Cache\CacheableResponseInterface
    */
   protected $response;
 
@@ -32,8 +41,11 @@ class Controller extends ControllerBase {
    * Controller constructor.
    *
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-   * @param \Drupal\schemata\SchemaFactory $typed_data_manager
-   * @param \Drupal\Core\Cache\CacheableResponse $response
+   *   The serializer service.
+   * @param \Drupal\schemata\SchemaFactory $schema_factory
+   *   The schema factory.
+   * @param \Drupal\Core\Cache\CacheableResponseInterface $response
+   *   The cacheable response.
    */
   public function __construct(SerializerInterface $serializer, SchemaFactory $schema_factory, CacheableResponseInterface $response) {
     $this->serializer = $serializer;
@@ -58,13 +70,13 @@ class Controller extends ControllerBase {
    * We have 2 different data formats involved. One is the schema format (for
    * instance JSON Schema) and the other one is the format that the schema is
    * describing (for instance jsonapi, json, hal+json, …). We need to provide
-   * both formats. Something like: ?_format=schema_json&_describes=api_json
+   * both formats. Something like: ?_format=schema_json&_describes=api_json.
    *
    * @param string $entity_type_id
    *   The entity type ID to describe.
    * @param string $bundle
    *   The (optional) bundle to describe.
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    *
    * @return \Drupal\Core\Cache\CacheableResponse
