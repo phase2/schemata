@@ -5,7 +5,7 @@
 A schema is a declarative definition of an entity's makeup. A way of describing
 the different pieces that make up the entity, much like an interface defines a
 class and exactly like an XML DTD describes an XML document. This project uses
-Drupal's new Typed Data system to faciliate the creation of schemas for your
+Drupal's new Typed Data system to facilitate the creation of schemas for your
 site.
 
 This is especially powerful in conjunction with the Drupal router, as your

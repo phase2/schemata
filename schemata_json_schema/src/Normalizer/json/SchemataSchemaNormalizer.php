@@ -2,7 +2,6 @@
 
 namespace Drupal\schemata_json_schema\Normalizer\json;
 
-use Drupal\Core\Url;
 use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\schemata\SchemaUrl;
@@ -67,7 +66,7 @@ class SchemataSchemaNormalizer extends JsonNormalizerBase {
    * @return \Drupal\Core\TypedData\DataDefinitionInterface[]
    *   The DataDefinitions to be processed.
    */
-  protected static function getProperties(SchemaInterface $entity, $format = NULL, $context = []) {
+  protected static function getProperties(SchemaInterface $entity, $format = NULL, array $context = []) {
     return $entity->getProperties();
   }
 

@@ -43,7 +43,7 @@ class TypeMapperPluginManager extends DefaultPluginManager implements FallbackPl
   /**
    * {@inheritdoc}
    */
-  public function getFallbackPluginId($plugin_id, array $configuration = array()) {
+  public function getFallbackPluginId($plugin_id, array $configuration = []) {
     return static::FALLBACK_TYPE_MAPPER;
   }
 

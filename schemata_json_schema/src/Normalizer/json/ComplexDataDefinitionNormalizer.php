@@ -48,11 +48,13 @@ class ComplexDataDefinitionNormalizer extends DataDefinitionNormalizer {
    *
    * @param \Drupal\Core\TypedData\ComplexDataDefinitionInterface $entity
    *   The complex data definition to be checked.
+   * @param array $context
+   *   The current serializer context.
    *
    * @return bool
    *   TRUE if it is a reference, FALSE otherwise.
    */
-  protected function isReferenceField(ComplexDataDefinitionInterface $entity, $context = NULL) {
+  protected function isReferenceField(ComplexDataDefinitionInterface $entity, array $context = NULL) {
     $main = $entity->getPropertyDefinition($entity->getMainPropertyName());
     // @todo use an interface or API call instead of an object check.
     return ($main instanceof DataReferenceTargetDefinition);

@@ -32,7 +32,7 @@ class SchemataSchemaNormalizer extends JsonSchemataSchemaNormalizer {
   /**
    * {@inheritdoc}
    */
-  public function normalize($entity, $format = NULL, array $context = array()) {
+  public function normalize($entity, $format = NULL, array $context = []) {
     // Create the array of normalized fields, starting with the URI.
     /* @var $entity \Drupal\schemata\Schema\SchemaInterface */
     $normalized = parent::normalize($entity, $format, $context);

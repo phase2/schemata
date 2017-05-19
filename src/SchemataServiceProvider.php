@@ -15,7 +15,7 @@ class SchemataServiceProvider implements ServiceModifierInterface {
    */
   public function alter(ContainerBuilder $container) {
     if ($container->has('http_middleware.negotiation') && is_a($container->getDefinition('http_middleware.negotiation')
-        ->getClass(), '\Drupal\Core\StackMiddleware\NegotiationMiddleware', TRUE)
+      ->getClass(), '\Drupal\Core\StackMiddleware\NegotiationMiddleware', TRUE)
     ) {
       // @see https://www.ietf.org/id/draft-wright-json-schema-00.txt
       $container->getDefinition('http_middleware.negotiation')
@@ -27,4 +27,3 @@ class SchemataServiceProvider implements ServiceModifierInterface {
   }
 
 }
-

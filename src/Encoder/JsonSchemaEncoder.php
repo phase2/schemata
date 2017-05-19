@@ -2,7 +2,6 @@
 
 namespace Drupal\schemata\Encoder;
 
-use Drupal\jsonapi\Normalizer\Value\ValueExtractorInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder as SymfonyJsonEncoder;
 
 /**

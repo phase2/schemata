@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Drupal\schemata\Routing;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -12,7 +11,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class Routes
+ * Class Routes.
  *
  * Dynamic routes for the data models.
  */
@@ -28,11 +27,15 @@ class Routes implements ContainerInjectionInterface {
   const CONTROLLER = '\Drupal\schemata\Controller\Controller::serialize';
 
   /**
+   * The entity type manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
+   * The entity type bundle info service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
   protected $entityTypeBundleInfo;

@@ -71,8 +71,6 @@ class SchemaFactory {
    * @param string $bundle
    *   URL input specifying an entity bundle to be processed. May be NULL
    *   for support of entities that do not have bundles.
-   * @param string $described_media_type
-   *   The media type of the data being described. Ex: application/vnd.api+json.
    *
    * @return \Drupal\schemata\Schema\Schema
    *   A Schema object which can be processed as a Rest Resource response.
