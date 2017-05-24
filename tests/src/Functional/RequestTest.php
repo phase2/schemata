@@ -20,8 +20,11 @@ class RequestTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['text', 'node', 'taxonomy', 'serialization', ];
+  public static $modules = ['text', 'node', 'taxonomy', 'serialization'];
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
@@ -59,17 +62,13 @@ class RequestTest extends BrowserTestBase {
         ->setTranslatable(FALSE)
         ->save();
     }
-
-
-
     // @todo Schemata Routes aren't rebuilt after new content type.
     $this->container->get('module_installer')->install(['schemata', 'schemata_json_schema'], TRUE);
     $this->drupalLogin($this->drupalCreateUser(['access schemata data models']));
   }
 
-
   /**
-   *
+   * Tests schemata requests.
    */
   public function testRequests() {
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
@@ -83,12 +82,7 @@ class RequestTest extends BrowserTestBase {
     foreach ($entity_type_manager->getDefinitions() as $entity_type_id => $entity_type) {
 
       $response = $this->request('GET', Url::fromRoute("schemata.$entity_type_id", [], $options), []);
-      //print $response->getBody()->getContents();
       $this->checkExpectResponse($response, $entity_type_id);
-      if ($entity_type_id == 'taxonomy_term') {
-        //var_export(json_decode($response->getBody()->getContents(), TRUE));
-        //return;
-      }
       if ($bundle_type = $entity_type->getBundleEntityType()) {
         $bundles = $entity_type_manager->getStorage($bundle_type)->loadMultiple();
         foreach ($bundles as $bundle) {
@@ -155,816 +149,830 @@ class RequestTest extends BrowserTestBase {
     return $request_options;
   }
 
+  /**
+   * Check the expected response.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The response from the test request.
+   * @param string $entity_type_id
+   *   Then entity type.
+   * @param string|null $bundle_name
+   *   The bundle name or NULL.
+   */
   protected function checkExpectResponse(ResponseInterface $response, $entity_type_id, $bundle_name = NULL) {
     $this->assertEquals('200', $response->getStatusCode());
-    $key = $entity_type_id . ($bundle_name? ":$bundle_name" : '');
+    $key = $entity_type_id . ($bundle_name ? ":$bundle_name" : '');
     $expected_responses = $this->getExpectResponses();
     if (isset($expected_responses[$key])) {
-      //$expected = $expected_responses[$key];
       $this->assertEquals($expected_responses[$key], json_decode($response->getBody()->getContents(), TRUE));
     }
   }
 
+  /**
+   * Gets expected responses.
+   *
+   * @return array
+   *   The expected responses.
+   */
   protected function getExpectResponses() {
-
-    $expected['node:camelids'] = array (
+    $expected['node:camelids'] = [
       '$schema' => 'http://json-schema.org/draft-04/schema#',
       'id' => "{$this->baseUrl}/schemata/node/camelids?_format=schema_json&_describes=json",
       'type' => 'object',
       'title' => 'node:camelids Schema',
       'description' => 'Describes the payload for \'node\' entities of the \'camelids\' bundle.',
       'properties' =>
-        array (
+        [
           'nid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'ID',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'Integer value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'uuid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'UUID',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text value',
                           'maxLength' => 128,
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'vid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Revision ID',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'Integer value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'langcode' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Language',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Language code',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'type' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Content type',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'target_id' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Content type ID',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'target_id',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'revision_timestamp' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Revision create time',
               'description' => 'The time that the current revision was created.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'number',
                           'title' => 'Timestamp value',
                           'format' => 'utc-millisec',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'revision_uid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Revision user',
               'description' => 'The user ID of the author of the current revision.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'target_id' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'User ID',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'target_id',
-                    ),
+                    ],
                   'title' => 'User',
                   'description' => 'The referenced entity',
-                ),
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'revision_log' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Revision log message',
               'description' => 'Briefly describe the changes you have made.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
+                    [
                       'value' => '',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'status' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Publishing status',
               'description' => 'A boolean indicating the published state.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
-                      'value' => true,
-                    ),
-                ),
+                    [
+                      'value' => TRUE,
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'title' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Title',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text value',
                           'maxLength' => 255,
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'uid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Authored by',
               'description' => 'The username of the content author.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'target_id' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'User ID',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'target_id',
-                    ),
+                    ],
                   'title' => 'User',
                   'description' => 'The referenced entity',
-                ),
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'created' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Authored on',
               'description' => 'The time that the node was created.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'number',
                           'title' => 'Timestamp value',
                           'format' => 'utc-millisec',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'changed' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Changed',
               'description' => 'The time that the node was last edited.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'number',
                           'title' => 'Timestamp value',
                           'format' => 'utc-millisec',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'promote' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Promoted to front page',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
-                      'value' => true,
-                    ),
-                ),
+                    [
+                      'value' => TRUE,
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'sticky' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Sticky at top of lists',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
-                      'value' => false,
-                    ),
-                ),
+                    [
+                      'value' => FALSE,
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'revision_translation_affected' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Revision translation affected',
               'description' => 'Indicates if the last edit of a translation belongs to current revision.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'default_langcode' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Default translation',
               'description' => 'A flag indicating whether this is the default translation.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
-                      'value' => true,
-                    ),
-                ),
+                    [
+                      'value' => TRUE,
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'field_test_node' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Test field',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text',
                           'maxLength' => 255,
-                        ),
+                        ],
                       'format' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text format',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
-        ),
+            ],
+        ],
       'required' =>
-        array (
+        [
           0 => 'nid',
           1 => 'uuid',
           2 => 'vid',
           3 => 'type',
           4 => 'title',
           5 => 'revision_translation_affected',
-        ),
-    );
+        ],
+    ];
 
-    $expected['taxonomy_term:camelids'] = array (
+    $expected['taxonomy_term:camelids'] = [
       '$schema' => 'http://json-schema.org/draft-04/schema#',
       'id' => "{$this->baseUrl}/schemata/taxonomy_term/camelids?_format=schema_json&_describes=json",
       'type' => 'object',
       'title' => 'taxonomy_term:camelids Schema',
       'description' => 'Describes the payload for \'taxonomy_term\' entities of the \'camelids\' bundle.',
       'properties' =>
-        array (
+        [
           'tid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Term ID',
               'description' => 'The term ID.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'Integer value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'uuid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'UUID',
               'description' => 'The term UUID.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text value',
                           'maxLength' => 128,
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'langcode' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Language',
               'description' => 'The term language code.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Language code',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'vid' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Vocabulary',
               'description' => 'The vocabulary to which the term is assigned.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'target_id' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Taxonomy vocabulary ID',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'target_id',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'name' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Name',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text value',
                           'maxLength' => 255,
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'minItems' => 1,
               'maxItems' => 1,
-            ),
+            ],
           'description' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Description',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text',
-                        ),
+                        ],
                       'format' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text format',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'weight' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Weight',
               'description' => 'The weight of this term in relation to other terms.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'Integer value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
+                    [
                       'value' => 0,
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'parent' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Term Parents',
               'description' => 'The parents of this term.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'target_id' =>
-                        array (
+                        [
                           'type' => 'integer',
                           'title' => 'Taxonomy term ID',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'target_id',
-                    ),
+                    ],
                   'title' => 'Taxonomy term',
                   'description' => 'The referenced entity',
-                ),
-            ),
+                ],
+            ],
           'changed' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Changed',
               'description' => 'The time that the term was last edited.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'number',
                           'title' => 'Timestamp value',
                           'format' => 'utc-millisec',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'default_langcode' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Default translation',
               'description' => 'A flag indicating whether this is the default translation.',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'boolean',
                           'title' => 'Boolean value',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'default' =>
-                array (
+                [
                   0 =>
-                    array (
-                      'value' => true,
-                    ),
-                ),
+                    [
+                      'value' => TRUE,
+                    ],
+                ],
               'maxItems' => 1,
-            ),
+            ],
           'field_test_taxonomy_term' =>
-            array (
+            [
               'type' => 'array',
               'title' => 'Test field',
               'items' =>
-                array (
+                [
                   'type' => 'object',
                   'properties' =>
-                    array (
+                    [
                       'value' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text',
                           'maxLength' => 255,
-                        ),
+                        ],
                       'format' =>
-                        array (
+                        [
                           'type' => 'string',
                           'title' => 'Text format',
-                        ),
-                    ),
+                        ],
+                    ],
                   'required' =>
-                    array (
+                    [
                       0 => 'value',
-                    ),
-                ),
+                    ],
+                ],
               'maxItems' => 1,
-            ),
-        ),
+            ],
+        ],
       'required' =>
-        array (
+        [
           0 => 'tid',
           1 => 'uuid',
           2 => 'vid',
           3 => 'name',
-        ),
-    );
+        ],
+    ];
 
-    $expected['taxonomy_term'] = array (
+    $expected['taxonomy_term'] = [
       '$schema' => 'http://json-schema.org/draft-04/schema#',
       'id' => "{$this->baseUrl}/schemata/taxonomy_term?_format=schema_json&_describes=json",
       'type' => 'object',
       'title' => 'taxonomy_term Schema',
       'description' => 'Describes the payload for \'taxonomy_term\' entities.',
-    ) + $expected['taxonomy_term:camelids'];
+    ] + $expected['taxonomy_term:camelids'];
     unset($expected['taxonomy_term']['properties']['field_test_taxonomy_term']);
 
-    $expected['node'] = array (
-        '$schema' => 'http://json-schema.org/draft-04/schema#',
-        'id' => "{$this->baseUrl}/schemata/node?_format=schema_json&_describes=json",
-        'type' => 'object',
-        'title' => 'node Schema',
-        'description' => 'Describes the payload for \'node\' entities.',
-      ) + $expected['node:camelids'];
+    $expected['node'] = [
+      '$schema' => 'http://json-schema.org/draft-04/schema#',
+      'id' => "{$this->baseUrl}/schemata/node?_format=schema_json&_describes=json",
+      'type' => 'object',
+      'title' => 'node Schema',
+      'description' => 'Describes the payload for \'node\' entities.',
+    ] + $expected['node:camelids'];
     unset($expected['node']['properties']['field_test_node']);
     return $expected;
   }
