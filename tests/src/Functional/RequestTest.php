@@ -14,6 +14,8 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Tests requests schemata routes.
+ *
+ * @group Schemata
  */
 class RequestTest extends BrowserTestBase {
 
