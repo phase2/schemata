@@ -127,21 +127,21 @@ class RequestTest extends BrowserTestBase {
   protected function request($method, Url $url, array $request_options) {
     $request_options[RequestOptions::HTTP_ERRORS] = FALSE;
     $request_options[RequestOptions::ALLOW_REDIRECTS] = FALSE;
-    $request_options = $this->decorateWithXdebugCookie($request_options);
+    $request_options = $this->decorateWithCookies($request_options);
     $client = $this->getSession()->getDriver()->getClient()->getClient();
     return $client->request($method, $url->setAbsolute(TRUE)->toString(), $request_options);
   }
 
   /**
-   * Adds the Xdebug cookie to the request options.
+   * Adds the cookies from the client to the request options.
    *
    * @param array $request_options
    *   The request options.
    *
    * @return array
-   *   Request options updated with the Xdebug cookie if present.
+   *   Request options updated with the client cookies if present.
    */
-  protected function decorateWithXdebugCookie(array $request_options) {
+  protected function decorateWithCookies(array $request_options) {
     $session = $this->getSession();
     $driver = $session->getDriver();
     if ($driver instanceof BrowserKitDriver) {
