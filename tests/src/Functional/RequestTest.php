@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\schemataFunctional;
+namespace Drupal\Tests\schemata\Functional;
 
 use Behat\Mink\Driver\BrowserKitDriver;
 use Drupal\Core\Url;
