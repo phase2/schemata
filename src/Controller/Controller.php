@@ -82,7 +82,7 @@ class Controller extends ControllerBase {
    * @return \Drupal\Core\Cache\CacheableResponse
    *   The response object.
    */
-  public function serialize($entity_type_id, $bundle, Request $request) {
+  public function serialize($entity_type_id, Request $request, $bundle = NULL) {
     $parts = $this->extractFormatNames($request);
 
     // Load the data to serialize from the route information on the current

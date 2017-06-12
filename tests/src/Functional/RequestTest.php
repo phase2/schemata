@@ -92,12 +92,8 @@ class RequestTest extends BrowserTestBase {
     $entity_type_manager = $this->container->get('entity_type.manager');
 
     foreach (['json', 'hal_json', 'api_json'] as $format) {
-
       foreach ($entity_type_manager->getDefinitions() as $entity_type_id => $entity_type) {
-        // @todo Check for all entity types https://www.drupal.org/node/2870904.
-        if (!$entity_type->getBundleEntityType()) {
-          $this->requestSchema($format, $entity_type_id);
-        }
+        $this->requestSchema($format, $entity_type_id);
         if ($bundle_type = $entity_type->getBundleEntityType()) {
           $bundles = $entity_type_manager->getStorage($bundle_type)->loadMultiple();
           foreach ($bundles as $bundle) {
