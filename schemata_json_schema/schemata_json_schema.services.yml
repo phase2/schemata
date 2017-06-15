@@ -82,12 +82,8 @@ services:
   # ----------------------------------------------------------------------------
   # - 3. HAL+JSON format.
   # ----------------------------------------------------------------------------
-  # HAL+JSON version of the Data Reference normalizer.
-  serializer.normalizer.data_reference_definition.schema_json.hal_json:
-    class: Drupal\schemata_json_schema\Normalizer\hal\DataReferenceDefinitionNormalizer
-    arguments: ['@entity_type.manager', '@rest.link_manager']
-    tags:
-      - { name: normalizer, priority: 30 }
+  # Note: The HAL+JSON version of the Data Reference normalizer depends on the
+  # HAL module and is in registered in SchemataHalServiceProvider.
 
   # Normalize complex data properties for HAL.
   # This services is primarily used to short-circuit merging normalization of
