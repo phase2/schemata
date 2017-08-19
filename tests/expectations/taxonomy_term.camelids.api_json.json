@@ -2,10 +2,20 @@
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
     "id": "{base_url}\/schemata\/taxonomy_term\/camelids?_format=schema_json&_describes=api_json",
     "type": "object",
-    "title": "taxonomy_term:camelids Schema",
-    "description": "Describes the payload for 'taxonomy_term' entities of the 'camelids' bundle.",
     "properties": {
+        "type": {
+            "type": "string",
+            "title": "type",
+            "description": "Resource type"
+        },
+        "id": {
+            "type": "string",
+            "title": "Resource ID",
+            "format": "uuid",
+            "maxLength": 128
+        },
         "attributes": {
+            "description": "Entity attributes",
             "type": "object",
             "properties": {
                 "tid": {
@@ -104,6 +114,7 @@
             ]
         },
         "relationships": {
+            "description": "Entity relationships",
             "properties": {
                 "vid": {
                     "type": "object",
@@ -166,6 +177,19 @@
                 }
             },
             "type": "object"
+        },
+        "links": {
+            "type": "object",
+            "description": "Entity links",
+            "properties": {
+                "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The absolute link to this entity."
+                }
+            }
         }
-    }
+    },
+    "title": "taxonomy_term:camelids Schema",
+    "description": "Describes the payload for 'taxonomy_term' entities of the 'camelids' bundle."
 }
