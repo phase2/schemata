@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the schemata module.
+ */
+
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+/**
+ * Implements hook_requirements().
+ */
+function schemata_requirements($phase) {
+  $requirements = [];
+  if ($phase == 'runtime') {
+    $manager = \Drupal::service('schemata.type_manager');
+
+    $unsupported = $manager->getUnsupportedTypeList();
+    if (!empty($unsupported)) {
+      $requirements['schemata_unsupported_types_detected'] = [
+        'title' => t('Unsupported Schemata Schema Types Found'),
+        'description' => t('Unsupported schema types happen when associated normalizers have been disabled. This site has flagged: @types', [
+          '@list' => implode(',', array_column($unsupported, 'label')),
+        ]),
+        // This is likely only a development issue.
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    }
+
+    if (empty($manager->getSupportedTypeList())) {
+      $requirements['schemata_no_supported_types_detected'] = [
+        'title' => t('No Supported Schemata Schema Types Found'),
+        'description' => t('Without a supported schema type, the Schemata module does not provide meaningful functionality. See the <a href="https://www.drupal.org/project/schemata">list of available Schema Types on Drupal.org</a>. For JSON Schema support, enable the schemata_json_schema sub-module.'),
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    }
+  }
+
+  return $requirements;
+}
