@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Provides schemata services that depend directly on HAL.
  */
-class SchemataHalServiceProvider implements ServiceProviderInterface {
+class SchemataJsonSchemaServiceProvider implements ServiceProviderInterface {
 
   /**
    * {@inheritdoc}
