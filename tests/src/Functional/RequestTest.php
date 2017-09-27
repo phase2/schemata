@@ -12,6 +12,7 @@ use Drupal\Tests\BrowserTestBase;
  * Tests requests schemata routes.
  *
  * @group Schemata
+ * @group SchemataJsonSchema
  */
 class RequestTest extends BrowserTestBase {
 
