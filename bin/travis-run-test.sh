@@ -9,7 +9,7 @@ case "$1" in
     PHP_CodeSniffer)
         cd $MODULE_DIR
         composer install
-        ./vendor/bin/phpcs
+        composer run-script phpcs
         exit $?
         ;;
     *)

@@ -20,6 +20,10 @@
     "config": {
       "sort-packages": true
     },
+    "scripts": {
+      "phpcs": "phpcs --standard=tests/phpcs.xml",
+      "phpcbf": "phpcbf --standard=tests/phpcs.xml"
+    },
     "repositories": [
         {
             "type": "composer",
