@@ -4,7 +4,6 @@ namespace Drupal\Tests\schemata\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
-use Drupal\schemata\SchemaFactory;
 use Drupal\schemata\Schema\SchemaInterface;
 use Drupal\schemata\Schema\NodeSchema;
 
@@ -119,17 +118,17 @@ class SchemaFactoryTest extends KernelTestBase {
    * Assert the schema has a title.
    *
    * @param \Drupal\schemata\Schema\SchemaInterface $schema
-   *  Schema to evaluate.
+   *   Schema to evaluate.
    */
   protected function assertSchemaHasTitle(SchemaInterface $schema) {
     $this->assertNotEmpty($schema->getMetadata()['title']);
   }
 
   /**
-   * Assert the schema has a description
+   * Assert the schema has a description.
    *
    * @param \Drupal\schemata\Schema\SchemaInterface $schema
-   *  Schema to evaluate.
+   *   Schema to evaluate.
    */
   protected function assertSchemaHasDescription(SchemaInterface $schema) {
     $this->assertNotEmpty($schema->getMetadata()['description']);
@@ -144,7 +143,7 @@ class SchemaFactoryTest extends KernelTestBase {
    * the schema object.
    *
    * @param \Drupal\schemata\Schema\SchemaInterface $schema
-   *  Schema to evaluate.
+   *   Schema to evaluate.
    */
   protected function assertSchemaHasProperties(SchemaInterface $schema) {
     $this->assertGreaterThanOrEqual(1, count($schema->getProperties()));
@@ -154,9 +153,9 @@ class SchemaFactoryTest extends KernelTestBase {
    * Assert the schema has the specified bundle.
    *
    * @param \Drupal\schemata\Schema\SchemaInterface $schema
-   *  Schema to evaluate.
+   *   Schema to evaluate.
    * @param string $bundle
-   *  Bundle we expect the Schema to self-declare.
+   *   Bundle we expect the Schema to self-declare.
    */
   protected function assertSchemaHasBundle(SchemaInterface $schema, string $bundle) {
     $this->assertEquals($bundle, $schema->getBundleId());
@@ -166,7 +165,7 @@ class SchemaFactoryTest extends KernelTestBase {
    * Assert the schema has no entity bundle.
    *
    * @param \Drupal\schemata\Schema\SchemaInterface $schema
-   *  Schema to evaluate.
+   *   Schema to evaluate.
    */
   protected function assertSchemaHasNoBundle(SchemaInterface $schema) {
     $this->assertEmpty($schema->getBundleId());
