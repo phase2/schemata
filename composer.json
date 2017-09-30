@@ -1,0 +1,35 @@
+{
+    "name": "drupal/schemata",
+    "description": "Facilitate generation of schema definitions of Drupal 8 data models.",
+    "type": "drupal-module",
+    "keywords": [ "Drupal", "json", "schema" ],
+    "homepage": "https://drupal.org/project/schemata",
+    "support": {
+        "issues": "https://drupal.org/project/issues/schemata",
+        "source": "https://cgit.drupalcode.org/schemata"
+    },
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Adam Ross",
+            "email": "grayside@gmail.com"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "config": {
+      "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "drupal/coder": "^8.2",
+        "league/json-guard": "^1.0",
+        "league/json-reference": "^1.0"
+    }
+}
