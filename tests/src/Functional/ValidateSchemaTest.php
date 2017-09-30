@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\schemata\Functional;
 
-use League\JsonReference\Dereferencer;
 use League\JsonGuard\Validator;
 
 /**
@@ -44,7 +43,8 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
    *   The bundle name or NULL.
    */
   protected function validateSchemaAsJsonSchema($format, $entity_type_id, $bundle_id = NULL) {
-    $json = $this->requestSchema($format, $entity_type_id, $bundle_id);
+    $json = $this->getRawSchemaByOptions($format, $entity_type_id, $bundle_id);
+    print_r($json);
     $this->assertSession()->statusCodeEquals(200);
 
     try {
@@ -54,11 +54,13 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
       $this->assertTrue(FALSE, "Could not decode JSON from schema response. Error: " . $e->getMessage());
     }
 
-    $dereferencer = Dereferencer::draft4();
-    // By definition of the JSON Schema spec, schemas use this key to refer
-    // to the schema to which they conform.
-    $schema = $dereferencer->dereference($data->{'$schema'});
+    // Prepare the schema for validation.
+    // By definition of the JSON Schema spec, schemas use a top-level '$schema'
+    // key to identify the schema specification with which they conform.
+    $schema = $this->getDereferencedSchema($data->{'$schema'});
+    $this->assertTrue(!empty($schema), 'The schema specification must be retrieved and dereferenced for use.');
 
+    // Validate our schema is a correct schema.
     $validator = new Validator($data, $schema);
     if ($validator->fails()) {
       $bundle_label = empty($bundle_id) ? 'no-bundle' : $bundle_id;

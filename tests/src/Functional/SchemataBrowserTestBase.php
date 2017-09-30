@@ -6,7 +6,9 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\schemata\SchemaUrl;
 use Drupal\Tests\BrowserTestBase;
+use League\JsonReference\Dereferencer;
 
 /**
  * Sets up functional testing for Schemata.
@@ -19,6 +21,15 @@ class SchemataBrowserTestBase extends BrowserTestBase {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
+  /**
+   * Dereferenced Schema Static Cache.
+   *
+   * @var array
+   *
+   * @see ::requestSchemaByUrl()
+   */
+  protected $schemaCache = [];
 
   /**
    * {@inheritdoc}
@@ -82,23 +93,73 @@ class SchemataBrowserTestBase extends BrowserTestBase {
   }
 
   /**
-   * Requests a Schema via HTTP.
+   * Retrieve the schema by URL and dereference for use.
+   *
+   * Dereferencing a schema processes references to external schema documents
+   * and prepares it to be used as a validation authority.
+   *
+   * This will static cache the schema so the same schema resource will not be
+   * retrieved and processed more than once per test run.
+   *
+   * @param string $url
+   *   Absolute URL to a JSON Schema resource.
+   *
+   * @return object
+   *   Dereferenced schema object.
+   *
+   * @todo Evaluate PSR-16 cache support built into Dereferencer.
+   *
+   * @see http://json-reference.thephpleague.com/caching
+   */
+  protected function getDereferencedSchema($url) {
+    if (!empty($this->schemaCache[$url])) {
+      $dereferencer = Dereferencer::draft4();
+      // By definition of the JSON Schema spec, schemas use this key to refer
+      // to the schema to which they conform.
+      $this->schemaCache[$url] = $dereferencer->dereference($url);
+    }
+
+    return $this->schemaCache[$url];
+  }
+
+  /**
+   * Requests a Schema via HTTP, ready for session assertions.
    *
    * @param string $format
    *   The described format.
    * @param string $entity_type_id
    *   Then entity type.
-   * @param string|null $bundle_name
+   * @param string|null $bundle_id
    *   The bundle name or NULL.
+   *
+   * @return string
+   *   Serialized schema contents.
    */
-  protected function requestSchema($format, $entity_type_id, $bundle_name = NULL) {
-    $options = [
-      'query' => [
-        '_format' => 'schema_json',
-        '_describes' => $format,
-      ],
-    ];
-    return $this->drupalGet("schemata/$entity_type_id/$bundle_name", $options);
+  protected function getRawSchemaByOptions($format, $entity_type_id, $bundle_id = NULL) {
+    $url = SchemaUrl::fromOptions('schema_json', $format, $entity_type_id, $bundle_id)->toString();
+    print $url;
+    return $this->drupalGet($url);
+  }
+
+  /**
+   * Requests a dereferenced Schema via HTTP.
+   *
+   * Dereferencing a schema processes references to external schema documents
+   * and prepares it to be used as a validation authority.
+   *
+   * @param string $format
+   *   The described format.
+   * @param string $entity_type_id
+   *   Then entity type.
+   * @param string|null $bundle_id
+   *   The bundle name or NULL.
+   *
+   * @return object
+   *   Dereferenced schema object.
+   */
+  protected function getDereferencedSchemaByOptions($format, $entity_type_id, $bundle_id = NULL) {
+    $url = SchemaUrl::fromOptions('schema_json', $format, $entity_type_id, $bundle_id)->toString();
+    return $this->requestSchemaByUrl($url);
   }
 
 }

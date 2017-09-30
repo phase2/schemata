@@ -3,14 +3,14 @@ language: php
 sudo: false
 
 php:
-  - 5.6
-  - 7.0
   - 7.1
+  - 7.0
+  - 5.6
 
 env:
+  - TEST_SUITE=PHP_CodeSniffer
   - TEST_SUITE=8.3.x
   - TEST_SUITE=8.4.x
-  - TEST_SUITE=PHP_CodeSniffer
 
 # Only run the coding standards check once.
 matrix:
@@ -38,6 +38,7 @@ before_script:
   - MODULE_DIR=$(pwd)
 
   # Install Composer dependencies for Schemata.
+  # @todo not needed for phpunit tests.
   - composer install
 
   # Navigate out of module directory to prevent blown stack by recursive module
