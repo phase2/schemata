@@ -157,7 +157,7 @@ class SchemaFactoryTest extends KernelTestBase {
    * @param string $bundle
    *   Bundle we expect the Schema to self-declare.
    */
-  protected function assertSchemaHasBundle(SchemaInterface $schema, string $bundle) {
+  protected function assertSchemaHasBundle(SchemaInterface $schema, $bundle) {
     $this->assertEquals($bundle, $schema->getBundleId());
   }
 
