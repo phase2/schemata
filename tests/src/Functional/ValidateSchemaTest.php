@@ -41,11 +41,13 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
    *   Then entity type.
    * @param string|null $bundle_id
    *   The bundle name or NULL.
+   *
+   * @todo how do you handle tests that should stop processing on a failure.
    */
   protected function validateSchemaAsJsonSchema($format, $entity_type_id, $bundle_id = NULL) {
     $json = $this->getRawSchemaByOptions($format, $entity_type_id, $bundle_id);
-    print_r($json);
     $this->assertSession()->statusCodeEquals(200);
+    $this->assertTrue(!empty($schema), 'Schema request should provide response content instead of a NULL value.');
 
     try {
       $data = json_decode($json);
@@ -53,6 +55,7 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
     catch (Exception $e) {
       $this->assertTrue(FALSE, "Could not decode JSON from schema response. Error: " . $e->getMessage());
     }
+    $this->assertNotEmpty($data->{'$schema'}, 'JSON Schema should include a $schema reference to a defining schema.');
 
     // Prepare the schema for validation.
     // By definition of the JSON Schema spec, schemas use a top-level '$schema'
