@@ -23,6 +23,13 @@ class SchemataBrowserTestBase extends BrowserTestBase {
   protected $entityTypeManager;
 
   /**
+   * Schema Factory.
+   *
+   * @var \Drupal\schemata\SchemaFactory
+   */
+  protected $schemaFactory;
+
+  /**
    * Dereferenced Schema Static Cache.
    *
    * @var array
@@ -53,6 +60,7 @@ class SchemataBrowserTestBase extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
     $this->entityTypeManager = $this->container->get('entity_type.manager');
+    $this->schemaFactory = $this->container->get('schemata.schema_factory');
 
     if (!NodeType::load('camelids')) {
       // Create a "Camelids" node type.
@@ -112,7 +120,7 @@ class SchemataBrowserTestBase extends BrowserTestBase {
    * @see http://json-reference.thephpleague.com/caching
    */
   protected function getDereferencedSchema($url) {
-    if (!empty($this->schemaCache[$url])) {
+    if (empty($this->schemaCache[$url])) {
       $dereferencer = Dereferencer::draft4();
       // By definition of the JSON Schema spec, schemas use this key to refer
       // to the schema to which they conform.

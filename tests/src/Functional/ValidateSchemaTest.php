@@ -21,9 +21,20 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
   public function testSchemataAreValidJsonSchema() {
     foreach (['json', 'hal_json', 'api_json'] as $described_format) {
       foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
+        try {
+          // Retrieving the plugin is redundant, but if this succeeds without
+          // throwing an error, it's a valid entity type for schema generation.
+          $this->schemaFactory->getSourceEntityPlugin($entity_type_id);
+        }
+        catch (\Exception $e) {
+          // Skip schema validation testing of invalid entity types.
+          // @todo add test coverage of skipped Config Entity schema generation
+          // in https://www.drupal.org/node/2868562 or related follow-up.
+          continue;
+        }
         $this->validateSchemaAsJsonSchema($described_format, $entity_type_id);
         if ($bundle_type = $entity_type->getBundleEntityType()) {
-          $bundles = $entity_type_manager->getStorage($bundle_type)->loadMultiple();
+          $bundles = $this->entityTypeManager->getStorage($bundle_type)->loadMultiple();
           foreach ($bundles as $bundle) {
             $this->validateSchemaAsJsonSchema($described_format, $entity_type_id, $bundle->id());
           }
@@ -47,7 +58,9 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
   protected function validateSchemaAsJsonSchema($format, $entity_type_id, $bundle_id = NULL) {
     $json = $this->getRawSchemaByOptions($format, $entity_type_id, $bundle_id);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertTrue(!empty($schema), 'Schema request should provide response content instead of a NULL value.');
+    // Requesting config entity schema gets a 200 response but no content.
+    // @todo return an error on requesting config schema.
+    $this->assertTrue(!empty($json), 'Schema request should provide response content instead of a NULL value.');
 
     try {
       $data = json_decode($json);
@@ -69,9 +82,7 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
       $bundle_label = empty($bundle_id) ? 'no-bundle' : $bundle_id;
       $message = "Schema ($entity_type_id:$bundle_label) failed validation for $format:\n";
       $errors = $validator->errors();
-      foreach ($errors as $error) {
-        $message .= $error->getMessage() . "\n";
-      }
+      $message .= json_encode($errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
       $this->assertTrue(FALSE, $message);
     }
 

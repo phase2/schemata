@@ -19,6 +19,8 @@ matrix:
       env: TEST_SUITE=PHP_CodeSniffer
     - php: 7.0
       env: TEST_SUITE=PHP_CodeSniffer
+    - php: 5.6
+      env: TEST_SUITE=8.4.x
 
 mysql:
   database: schemata
