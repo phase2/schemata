@@ -19,7 +19,7 @@ class ValidateSchemaTest extends SchemataBrowserTestBase {
    * Test the generated schemas are valid JSON Schema.
    */
   public function testSchemataAreValidJsonSchema() {
-    foreach (['json', 'hal_json', 'api_json'] as $described_format) {
+    foreach (['json', 'hal_json'] as $described_format) {
       foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
         try {
           // Retrieving the plugin is redundant, but if this succeeds without

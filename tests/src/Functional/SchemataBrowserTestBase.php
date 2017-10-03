@@ -145,7 +145,6 @@ class SchemataBrowserTestBase extends BrowserTestBase {
    */
   protected function getRawSchemaByOptions($format, $entity_type_id, $bundle_id = NULL) {
     $url = SchemaUrl::fromOptions('schema_json', $format, $entity_type_id, $bundle_id)->toString();
-    print $url;
     return $this->drupalGet($url);
   }
 
