@@ -3,7 +3,7 @@
 namespace Drupal\schemata;
 
 use Psr\Log\LoggerInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\TypedData\TypedDataManager;
 
@@ -49,14 +49,14 @@ class SchemaFactory {
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The EntityTypeManager to extract details of entity types.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfo $entity_type_bundle_info
    *   The EntityTypeManager to extract details of entity types.
    * @param \Drupal\Core\TypedData\TypedDataManager $typed_data_manager
    *   The TypedDataManager to extract meaning of individual Entity properties.
    */
-  public function __construct(LoggerInterface $logger, EntityTypeManager $entity_type_manager, EntityTypeBundleInfo $entity_type_bundle_info, TypedDataManager $typed_data_manager) {
+  public function __construct(LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfo $entity_type_bundle_info, TypedDataManager $typed_data_manager) {
     $this->logger = $logger;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
