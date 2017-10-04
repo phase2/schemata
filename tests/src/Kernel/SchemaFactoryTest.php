@@ -99,19 +99,35 @@ class SchemaFactoryTest extends KernelTestBase {
   /**
    * @covers ::create
    */
-  public function testInvalidEntity() {
-    $schema = $this->factory->create('camelid');
+  public function testInvalidEntityOnCreate() {
+    $schema = $this->factory->create('gastropod');
     $this->assertEmpty($schema, 'Schemata should not produce a schema for non-existant entity types.');
-    $schema = $this->factory->create('node', 'camelid');
+    $schema = $this->factory->create('node', 'gastropod');
     $this->assertEmpty($schema, 'Schemata should not produce a schema for non-existant bundles.');
+  }
+
+  /**
+   * @covers ::getSourceEntityPlugin
+   */
+  public function testInvalidEntityOnGetPlugin() {
+    $this->setExpectedException('\Drupal\Component\Plugin\Exception\PluginNotFoundException');
+    $this->factory->getSourceEntityPlugin('gastropod');
   }
 
   /**
    * @covers ::create
    */
-  public function testConfigEntity() {
+  public function testConfigEntityOnCreate() {
     $schema = $this->factory->create('node_type');
     $this->assertEmpty($schema, 'Schemata does not support Config entities.');
+  }
+
+  /**
+   * @covers ::getSourceEntityPlugin
+   */
+  public function testConfigEntityOnGetPlugin() {
+    $this->setExpectedException('\InvalidArgumentException');
+    $this->factory->getSourceEntityPlugin('node_type');
   }
 
   /**
