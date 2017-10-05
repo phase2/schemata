@@ -22,7 +22,12 @@
     },
     "scripts": {
       "phpcs": "phpcs --standard=tests/phpcs.xml",
-      "phpcbf": "phpcbf --standard=tests/phpcs.xml"
+      "phpcbf": "phpcbf --standard=tests/phpcs.xml",
+      "lint": "parallel-lint -e php,module,install,profile,theme,inc --exclude vendor/ --blame .",
+      "quality": [
+        "@lint",
+        "@phpcs"
+      ]
     },
     "repositories": [
         {
@@ -33,6 +38,7 @@
     "require": {},
     "require-dev": {
         "drupal/coder": "^8.2",
+        "jakub-onderka/php-parallel-lint": "^0.9.2",
         "league/json-guard": "^1.0",
         "league/json-reference": "^1.0"
     }

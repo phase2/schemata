@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Run either PHPUnit tests or PHP_CodeSniffer tests on Travis CI, depending
+# Run either PHPUnit tests or CODE_QUALITY tests on Travis CI, depending
 # on the passed in parameter.
 #
 # Adapted from https://github.com/Gizra/og/blob/8.x-1.x/scripts/travis-ci/run-test.sh
 
 case "$1" in
-    PHP_CodeSniffer)
+    CODE_QUALITY)
         cd $MODULE_DIR
         composer install
-        composer run-script phpcs
+        composer run-script quality
         exit $?
         ;;
     *)
