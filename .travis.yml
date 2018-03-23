@@ -8,8 +8,8 @@ php:
 
 env:
   - TEST_SUITE=CODE_QUALITY
-  - TEST_SUITE=8.3.x
   - TEST_SUITE=8.4.x
+  - TEST_SUITE=8.5.x
 
 # Only run the coding standards check once.
 matrix:
