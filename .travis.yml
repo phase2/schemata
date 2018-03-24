@@ -5,22 +5,22 @@ sudo: false
 php:
   - 7.1
   - 7.0
-  - 5.6
+  - 7.2
 
 env:
   - TEST_SUITE=CODE_QUALITY
-  - TEST_SUITE=8.3.x
   - TEST_SUITE=8.4.x
+  - TEST_SUITE=8.5.x
 
 # Only run the coding standards check once.
 matrix:
   exclude:
-    - php: 5.6
-      env: TEST_SUITE=CODE_QUALITY
     - php: 7.0
       env: TEST_SUITE=CODE_QUALITY
-    - php: 5.6
-      env: TEST_SUITE=8.4.x
+    - php: 7.2
+      env: TEST_SUITE=CODE_QUALITY
+  allow_failures:
+    - php: 7.2
 
 mysql:
   database: schemata

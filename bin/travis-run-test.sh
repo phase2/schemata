@@ -8,12 +8,17 @@
 case "$1" in
     CODE_QUALITY)
         cd $MODULE_DIR
+        echo "ENSURE DEVELOPMENT TOOLS"
         composer install
+        echo "VALIDATE COMPOSER.JSON FILE"
+        composer validate --no-check-lock --no-check-publish --no-interaction
+        echo "RUN CODE QUALITY CHECKS"
         composer run-script quality
         exit $?
         ;;
     *)
-        ln -s $MODULE_DIR $DRUPAL_DIR/modules/schemata
+        echo "RUN PHPUNIT TESTS"
+        ln -sv $MODULE_DIR $DRUPAL_DIR/modules/schemata
         cd $DRUPAL_DIR
         ./vendor/bin/phpunit -c ./core/phpunit.xml.dist $MODULE_DIR/tests
         exit $?
