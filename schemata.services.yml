@@ -17,6 +17,19 @@ services:
       - '@typed_data_manager'
       - '@config.typed'
 
+  plugin.manager.schemata.schema_type:
+    class: Drupal\schemata\Plugin\Type\SchemaTypePluginManager
+    arguments:
+      - '@container.namespaces'
+      - '@cache.discovery'
+      - '@module_handler'
+
+  schemata.type_manager:
+    class: Drupal\schemata\SchemaTypeManager
+    arguments:
+      - '@plugin.manager.schemata.schema_type'
+      - '%serializer.formats%'
+
   # Create a log channel for this module. This simplifies logging setup code in
   # this code that will do logging. As a tradeoff, it also adds this fairly
   # specific logging channel to the system for all requests.
