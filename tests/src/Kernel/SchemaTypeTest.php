@@ -3,7 +3,6 @@
 namespace Drupal\Tests\schemata\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\schemata\Schema\SchemaTypeManager;
 
 /**
  * Tests the Schema Type Manager service.
@@ -42,6 +41,8 @@ class SchemaTypeTest extends KernelTestBase {
   }
 
   /**
+   * Test coverage for the Unsupported Type List.
+   *
    * @todo Add a SchemaType without a matching serializer to test this.
    * @covers ::getUnsupportedTypeList
    */
@@ -82,8 +83,9 @@ class SchemaTypeTest extends KernelTestBase {
     // Handles the case of a format that is never expected.
     assert(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
       '"schema_json" cannot describe invalid format "camelid"');
-    // Handles the case of a format we are not currently enabled, but we might
-    // add support for in the future. api_json and camelid together help triangulate
+    // Handles the case of a format not currently enabled, but we might add
+    // support in the future. Both test cases are present to help catch
+    // the problem if JSONAPI is added to this test in the future.
     // which type of error we might run into at that time.
     assert(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
       '"schema_json" cannot describe inactive format "api_json"');
@@ -100,4 +102,5 @@ class SchemaTypeTest extends KernelTestBase {
     assert(!$this->typeManager->isSerializationFormat('camelid'),
       '"camelid" is an invalid serializer format.');
   }
+
 }
