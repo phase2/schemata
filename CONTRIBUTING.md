@@ -1,5 +1,14 @@
 # CONTRIBUTING
 
+## Updating Development Dependencies
+
+In order to facilitate automated testing validation of the generated JSON Schema,
+we are adding league/json-guard and league/json-reference to Drupal's dependencies
+as part of the testing script.
+
+If the versions of these libraries are changed either in .travis.yml or in composer.json,
+it must be changed in the other.
+
 ## Add a New Schema Type Format
 
 Before submitting a change for a new Schema Type, [create an issue](https://www.drupal.org/project/issues/schemata)
