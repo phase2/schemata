@@ -25,6 +25,7 @@ class SchemaTypeTest extends KernelTestBase {
    */
   public static $modules = [
     'hal',
+    'schemata',
     'schemata_json_schema',
     'serialization',
     'system',
@@ -36,7 +37,6 @@ class SchemaTypeTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-
     $this->typeManager = \Drupal::service('schemata.type_manager');
   }
 
