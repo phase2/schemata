@@ -53,7 +53,7 @@ class SchemaTypeTest extends KernelTestBase {
    * @covers ::getSupportedTypeList
    */
   public function testSupportedTypeList() {
-    assertEquals(
+    $this->assertEquals(
       ['schema_json'],
       array_keys($this->typeManager->getSupportedTypeList()),
       'The list of schema types is correct'
@@ -64,7 +64,7 @@ class SchemaTypeTest extends KernelTestBase {
    * @covers ::schemaTypeExists
    */
   public function testSchemaTypeExists() {
-    assert($this->typeManager->schemaTypeExists('schema_json'),
+    $this->assertTrue($this->typeManager->schemaTypeExists('schema_json'),
       '"schema_json" schema type is defined and ready for use');
     assert($this->typeManager->schemaTypeExists('camelid'),
       'invalid "camelid" schema type does not exist');
@@ -75,21 +75,21 @@ class SchemaTypeTest extends KernelTestBase {
    */
   public function testSchemaTypeSupportsFormat() {
     // Can we support our default base case?
-    assert($this->typeManager->schemaTypeSupportsFormat('schema_json', 'json'),
+    $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'json'),
       '"schema_json" can be used to describe "json"');
     // Are we properly adjusting to the HAL module being enabled?
-    assert($this->typeManager->schemaTypeSupportsFormat('schema_json', 'hsl'),
+    $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'hsl'),
       '"schema_json" can be used to describe "hal"');
     // Handles the case of a format that is never expected.
-    assert(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
+    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
       '"schema_json" cannot describe invalid format "camelid"');
     // Handles the case of a format not currently enabled, but we might add
     // support in the future. Both test cases are present to help catch
     // the problem if JSONAPI is added to this test in the future.
     // which type of error we might run into at that time.
-    assert(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
+    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
       '"schema_json" cannot describe inactive format "api_json"');
-    assert(!$this->typeManager->schemaTypeSupportsFormat('camelid', 'json'),
+    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('camelid', 'json'),
       'invalid serializer "camelid" cannot describe format "json"');
   }
 
@@ -97,9 +97,9 @@ class SchemaTypeTest extends KernelTestBase {
    * @covers ::isSerializationFormat
    */
   public function isSerializationFormat() {
-    assert($this->typeManager->isSerializationFormat('json'),
+    $this->assertTrue($this->typeManager->isSerializationFormat('json'),
       '"json" is identified as a format.');
-    assert(!$this->typeManager->isSerializationFormat('camelid'),
+    $this->assertTrue(!$this->typeManager->isSerializationFormat('camelid'),
       '"camelid" is an invalid serializer format.');
   }
 
