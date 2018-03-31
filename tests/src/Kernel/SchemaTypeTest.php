@@ -66,7 +66,7 @@ class SchemaTypeTest extends KernelTestBase {
   public function testSchemaTypeExists() {
     $this->assertTrue($this->typeManager->schemaTypeExists('schema_json'),
       '"schema_json" schema type is defined and ready for use');
-    assert($this->typeManager->schemaTypeExists('camelid'),
+    $this->assertFalse($this->typeManager->schemaTypeExists('camelid'),
       'invalid "camelid" schema type does not exist');
   }
 
@@ -81,15 +81,15 @@ class SchemaTypeTest extends KernelTestBase {
     $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'hsl'),
       '"schema_json" can be used to describe "hal"');
     // Handles the case of a format that is never expected.
-    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
+    $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
       '"schema_json" cannot describe invalid format "camelid"');
     // Handles the case of a format not currently enabled, but we might add
     // support in the future. Both test cases are present to help catch
     // the problem if JSONAPI is added to this test in the future.
     // which type of error we might run into at that time.
-    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
+    $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
       '"schema_json" cannot describe inactive format "api_json"');
-    $this->assertTrue(!$this->typeManager->schemaTypeSupportsFormat('camelid', 'json'),
+    $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('camelid', 'json'),
       'invalid serializer "camelid" cannot describe format "json"');
   }
 
@@ -99,8 +99,8 @@ class SchemaTypeTest extends KernelTestBase {
   public function isSerializationFormat() {
     $this->assertTrue($this->typeManager->isSerializationFormat('json'),
       '"json" is identified as a format.');
-    $this->assertTrue(!$this->typeManager->isSerializationFormat('camelid'),
-      '"camelid" is an invalid serializer format.');
+    $this->assertFalse($this->typeManager->isSerializationFormat('camelid'),
+      '"camelid" is an invalid serializer format');
   }
 
 }
