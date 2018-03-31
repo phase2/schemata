@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * Module code for Schemata JSON Schema module.
+ */
+
+/**
+ * Implements hook_schemata_schema_type_alter().
+ */
+function schemata_json_schema_schemata_schema_type_alter(&$definitions) {
+  if (\Drupal::moduleHandler()->moduleExists('hal')) {
+    $definitions['schema_json']['describes']['hal_json'] = 'HAL+JSON';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('jsonapi')) {
+    $definitions['schema_json']['describes']['api_json'] = 'JSONAPI';
+  }
+}
