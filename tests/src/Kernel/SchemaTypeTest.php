@@ -78,8 +78,8 @@ class SchemaTypeTest extends KernelTestBase {
     $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'json'),
       '"schema_json" can be used to describe "json"');
     // Are we properly adjusting to the HAL module being enabled?
-    $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'hsl'),
-      '"schema_json" can be used to describe "hal"');
+    $this->assertTrue($this->typeManager->schemaTypeSupportsFormat('schema_json', 'hal_json'),
+      '"schema_json" can be used to describe "hal_json"');
     // Handles the case of a format that is never expected.
     $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('schema_json', 'camelid'),
       '"schema_json" cannot describe invalid format "camelid"');
@@ -90,7 +90,7 @@ class SchemaTypeTest extends KernelTestBase {
     $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('schema_json', 'api_json'),
       '"schema_json" cannot describe inactive format "api_json"');
     $this->assertFalse($this->typeManager->schemaTypeSupportsFormat('camelid', 'json'),
-      'invalid serializer "camelid" cannot describe format "json"');
+      'invalid serialization format "camelid" cannot describe format "json"');
   }
 
   /**
